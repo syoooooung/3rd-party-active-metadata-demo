@@ -25,11 +25,19 @@ interface Props {
 }
 
 const COLOR_MAP: Record<string, { background: string; border: string }> = {
-  Document: { background: '#eff6ff', border: '#3b82f6' },
-  Key: { background: '#f0fdf4', border: '#22c55e' },
-  Value: { background: '#fef9c3', border: '#eab308' },
-  NormalizedValue: { background: '#f3e8ff', border: '#a855f7' },
-  Centrality: { background: '#fce7f3', border: '#ec4899' },
+  Document: { background: '#dbeafe', border: '#2563eb' },
+  Hospital: { background: '#dcfce7', border: '#16a34a' },
+  ClinicalTrial: { background: '#fef3c7', border: '#f59e0b' },
+  ResearchPaper: { background: '#e0e7ff', border: '#6366f1' },
+  MedicalDevice: { background: '#fce7f3', border: '#ec4899' },
+  Topic: { background: '#fed7aa', border: '#ea580c' },
+  Tag: { background: '#f3e8ff', border: '#a855f7' },
+  Key: { background: '#d1fae5', border: '#059669' },
+  Value: { background: '#fef3c7', border: '#f59e0b' },
+  NormalizedValue: { background: '#e9d5ff', border: '#9333ea' },
+  Centrality: { background: '#fbcfe8', border: '#db2777' },
+  Disease: { background: '#fee2e2', border: '#dc2626' },
+  Technology: { background: '#ddd6fe', border: '#7c3aed' },
 }
 
 function formatTooltip(node: GraphNode): string {
@@ -104,13 +112,18 @@ export default function GraphViewer({ graph, onNodeClick }: Props) {
     // 노드 변환
     const nodes = Array.from(nodeMap.values()).map(node => {
       const label = node.labels[0] || 'Unknown'
-      const colors = COLOR_MAP[label] || { background: '#f8fafc', border: '#cbd5e1' }
+      const colors = COLOR_MAP[label] || { background: '#f1f5f9', border: '#94a3b8' }
 
       let displayLabel = ''
-      if (label === 'Document') {
-        displayLabel = node.properties.id?.substring(0, 10) || 'Doc'
+      if (label === 'Document' || label === 'Hospital' || label === 'ClinicalTrial' || label === 'ResearchPaper' || label === 'MedicalDevice') {
+        displayLabel = node.properties.name || node.properties.doc_id?.substring(0, 12) || node.properties.id?.substring(0, 12) || 'Doc'
       } else {
         displayLabel = node.properties.name || node.id
+      }
+
+      // 길이에 따라 라벨 자르기
+      if (displayLabel.length > 15) {
+        displayLabel = displayLabel.substring(0, 15) + '...'
       }
 
       const mergeKey = (label === 'Key' || label === 'Value')
@@ -121,9 +134,30 @@ export default function GraphViewer({ graph, onNodeClick }: Props) {
         id: mergeKey,
         label: displayLabel,
         title: formatTooltip(node),  // 툴팁 추가
-        color: colors,
-        shape: label === 'Document' ? 'box' : 'ellipse',
-        font: { size: 12, color: '#1a1d29' },
+        color: {
+          background: colors.background,
+          border: colors.border,
+          highlight: {
+            background: colors.background,
+            border: colors.border
+          },
+          hover: {
+            background: colors.background,
+            border: colors.border
+          }
+        },
+        shape: 'dot',  // 모든 노드를 원형으로
+        size: 25,  // 노드 크기 증가
+        font: {
+          size: 14,
+          color: '#1a1a1a',
+          face: 'system-ui, -apple-system, sans-serif',
+          bold: {
+            color: '#1a1a1a'
+          }
+        },
+        borderWidth: 3,
+        borderWidthSelected: 4,
       }
     })
 
@@ -142,10 +176,30 @@ export default function GraphViewer({ graph, onNodeClick }: Props) {
           from: fromId,
           to: toId,
           label: rel.type,
-          arrows: { to: { enabled: true } },
-          font: { size: 10, align: 'top', color: '#64748b' },
-          color: { color: '#cbd5e1', highlight: '#3b82f6' },
-          width: 2,
+          arrows: {
+            to: {
+              enabled: true,
+              scaleFactor: 0.8
+            }
+          },
+          font: {
+            size: 11,
+            align: 'horizontal',
+            color: '#64748b',
+            strokeWidth: 0,
+            face: 'system-ui, -apple-system, sans-serif'
+          },
+          color: {
+            color: '#cbd5e1',
+            highlight: '#3b82f6',
+            hover: '#3b82f6'
+          },
+          width: 2.5,
+          smooth: {
+            enabled: true,
+            type: 'curvedCW',
+            roundness: 0.15
+          }
         })
       }
     })
@@ -156,16 +210,28 @@ export default function GraphViewer({ graph, onNodeClick }: Props) {
       physics: {
         enabled: true,
         barnesHut: {
-          gravitationalConstant: -8000,
+          gravitationalConstant: -12000,
           centralGravity: 0.3,
-          springLength: 150,
+          springLength: 200,
+          springConstant: 0.04,
+          damping: 0.09,
+          avoidOverlap: 0.5
         },
-        stabilization: { iterations: 150 },
+        stabilization: {
+          iterations: 200,
+          updateInterval: 25
+        },
       },
       interaction: {
         hover: true,
         tooltipDelay: 100,
+        navigationButtons: true,
+        keyboard: true,
       },
+      layout: {
+        improvedLayout: true,
+        randomSeed: 42
+      }
     }
 
     // 기존 네트워크 삭제
