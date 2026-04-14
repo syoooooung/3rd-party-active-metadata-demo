@@ -60,6 +60,8 @@
   border-radius: 8px;
   font-size: 13px;
   transition: all 0.2s;
+  color: #1a1a1a;
+  background: white;
 }
 
 .search-input:focus {
@@ -89,6 +91,7 @@
   font-size: 12px;
   background: white;
   width: 100px;
+  color: #1a1a1a;
 }
 
 .search-button {
@@ -182,4 +185,56 @@
   color: #666;
   font-size: 12px;
   line-height: 1.6;
+}
+
+/* 추천 검색어 스타일 */
+.recommended-queries {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+}
+
+.recommended-queries h4 {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.query-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.query-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 12px;
+  color: #333;
+  text-align: left;
+}
+
+.query-chip:hover {
+  border-color: #4CAF50;
+  background: linear-gradient(135deg, #f1f8f4 0%, #ffffff 100%);
+  transform: translateX(2px);
+  box-shadow: 0 2px 6px rgba(76, 175, 80, 0.15);
+}
+
+.chip-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.chip-text {
+  flex: 1;
+  line-height: 1.4;
 }

@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import GraphViewer from '../components/GraphViewer'
-import { mockSearchResult } from '../mockData'
+import { mockSearchResult, mockRecommendedQueries } from '../mockData'
 import './SearchPage.css'
 
 export default function SearchPage() {
   const [query, setQuery] = useState('')
-  const [topK, setTopK] = useState(3)
+  const [topK, setTopK] = useState(5)
   const [results, setResults] = useState<any[]>([])
   const [graph, setGraph] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -22,6 +22,10 @@ export default function SearchPage() {
     }, 1000)
   }
 
+  const handleRecommendedQuery = (recommendedQuery: string) => {
+    setQuery(recommendedQuery)
+  }
+
   const handleNodeClick = async (nodeId: string) => {
     console.log('Node clicked:', nodeId)
     // In demo mode, just show current graph
@@ -32,12 +36,12 @@ export default function SearchPage() {
       <div className="search-layout">
         <div className="search-sidebar">
           <div className="search-panel">
-          <h2>Graph Search</h2>
+          <h2>🔍 자연어 검색 (Semantic Search)</h2>
           <div className="search-input-group">
             <input
               type="text"
               className="search-input"
-              placeholder="검색어를 입력하세요 (예: 병상수가 100개 이상인 병원)"
+              placeholder="자연어로 검색하세요 (예: 대장암 임상시험과 관련된 병원 찾기)"
               value={query}
               onChange={e => setQuery(e.target.value)}
               onKeyPress={e => e.key === 'Enter' && handleSearch()}
@@ -61,6 +65,29 @@ export default function SearchPage() {
             >
               {isLoading ? 'Searching...' : 'Search'}
             </button>
+          </div>
+
+          <div className="recommended-queries">
+            <h4>💡 추천 검색어</h4>
+            <div className="query-chips">
+              {mockRecommendedQueries.map((item, idx) => (
+                <button
+                  key={idx}
+                  className="query-chip"
+                  onClick={() => handleRecommendedQuery(item.query)}
+                  title={`카테고리: ${item.category}`}
+                >
+                  <span className="chip-icon">{
+                    item.category === '임상시험' ? '🧪' :
+                    item.category === '의료기기' ? '⚕️' :
+                    item.category === '질병-기기 연관' ? '🔗' :
+                    item.category === '병원-기술' ? '🏥' :
+                    '📋'
+                  }</span>
+                  <span className="chip-text">{item.query}</span>
+                </button>
+              ))}
+            </div>
           </div>
           </div>
 

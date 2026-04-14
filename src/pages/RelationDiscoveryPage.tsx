@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { mockRelationDiscovery } from '../mockData'
+import { mockRelationDiscovery, mockRecommendedDocIds } from '../mockData'
 import './RelationDiscoveryPage.css'
 
 interface Candidate {
@@ -54,6 +54,10 @@ export default function RelationDiscoveryPage() {
     alert(`관계 제안이 생성되었습니다!\nSource: ${sourceDocId}\nTarget: ${targetDocId}\nProposal ID: proposal_${Date.now()}`)
   }
 
+  const handleRecommendedDocId = (docId: string) => {
+    setSourceDocId(docId)
+  }
+
   return (
     <div className="relation-discovery-page">
       <div className="discovery-layout">
@@ -93,6 +97,28 @@ export default function RelationDiscoveryPage() {
               >
                 {isLoading ? '🔄 발굴 중...' : '✨ 후보 발굴'}
               </button>
+            </div>
+
+            <div className="recommended-docs">
+              <h4>💡 추천 문서 ID</h4>
+              <div className="doc-id-cards">
+                {mockRecommendedDocIds.map((item, idx) => (
+                  <button
+                    key={idx}
+                    className="doc-id-card"
+                    onClick={() => handleRecommendedDocId(item.doc_id)}
+                    title={item.relationChain}
+                  >
+                    <div className="doc-id-header">
+                      <span className="doc-id-badge">{item.doc_id}</span>
+                      <span className="doc-id-count">+{item.relatedDocs.length}</span>
+                    </div>
+                    <div className="doc-id-name">{item.name}</div>
+                    <div className="doc-id-desc">{item.description}</div>
+                    <div className="doc-id-chain">{item.relationChain}</div>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 

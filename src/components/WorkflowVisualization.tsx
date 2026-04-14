@@ -15,15 +15,20 @@ interface Props {
 }
 
 const WORKFLOW_STEPS = [
-  { id: 1, name: 'Data Ingestion', description: '입력 데이터 수신' },
-  { id: 2, name: 'Schema Analysis', description: '데이터 구조 분석' },
-  { id: 3, name: 'Graph Construction', description: 'Key-Value 추출 및 그래프 생성' },
-  { id: 4, name: 'Value Normalization', description: '데이터 정규화 및 통합' },
-  { id: 5, name: 'Completion', description: '파이프라인 완료' },
+  { id: 1, name: 'Data Ingestion', icon: '📥', description: '입력 데이터 수신', color: '#6366f1' },
+  { id: 2, name: 'Schema Analysis', icon: '🔍', description: '데이터 구조 분석', color: '#8b5cf6' },
+  { id: 3, name: 'Graph Construction', icon: '🕸️', description: 'Key-Value 추출 및 그래프 생성', color: '#ec4899' },
+  { id: 4, name: 'Value Normalization', icon: '⚙️', description: '데이터 정규화 및 통합', color: '#f59e0b' },
+  { id: 5, name: 'Completion', icon: '✅', description: '파이프라인 완료', color: '#10b981' },
 ]
+
+const CARD_WIDTH = 200
+const CARD_HEIGHT = 180
+const CARD_GAP = 120
 
 export default function WorkflowVisualization({ events, isRunning }: Props) {
   const logsEndRef = useRef<HTMLDivElement>(null)
+  const svgRef = useRef<SVGSVGElement>(null)
 
   useEffect(() => {
     logsEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -45,6 +50,54 @@ export default function WorkflowVisualization({ events, isRunning }: Props) {
     return completedEvent?.data || null
   }
 
+  const getStepPosition = (index: number) => {
+    return {
+      x: 40 + index * (CARD_WIDTH + CARD_GAP),
+      y: 60
+    }
+  }
+
+  const renderConnections = () => {
+    const paths = []
+
+    for (let i = 0; i < WORKFLOW_STEPS.length - 1; i++) {
+      const fromPos = getStepPosition(i)
+      const toPos = getStepPosition(i + 1)
+      const status = getStepStatus(WORKFLOW_STEPS[i].id)
+
+      const fromX = fromPos.x + CARD_WIDTH
+      const fromY = fromPos.y + CARD_HEIGHT / 2
+      const toX = toPos.x
+      const toY = toPos.y + CARD_HEIGHT / 2
+
+      const dx = toX - fromX
+      const cp1x = fromX + dx * 0.5
+      const cp2x = toX - dx * 0.5
+
+      const d = `M ${fromX} ${fromY} C ${cp1x} ${fromY}, ${cp2x} ${toY}, ${toX} ${toY}`
+
+      const isActive = status === 'completed'
+
+      paths.push(
+        <path
+          key={i}
+          d={d}
+          fill="none"
+          stroke={isActive ? '#4CAF50' : '#cbd5e1'}
+          strokeWidth="2"
+          markerEnd={isActive ? 'url(#arrow-active)' : 'url(#arrow)'}
+          markerStart={isActive ? 'url(#dot-active)' : 'url(#dot)'}
+          className="connection-path"
+          style={{
+            transition: 'stroke 0.3s ease'
+          }}
+        />
+      )
+    }
+
+    return paths
+  }
+
   return (
     <div className="workflow-visualization">
       <div className="workflow-header">
@@ -57,18 +110,69 @@ export default function WorkflowVisualization({ events, isRunning }: Props) {
         )}
       </div>
 
-      <div className="workflow-steps">
-        {WORKFLOW_STEPS.map((step, index) => {
-          const status = getStepStatus(step.id)
-          const data = getStepData(step.id)
+      <div className="lineage-container">
+        {/* Grid background */}
+        <svg className="lineage-bg">
+          <defs>
+            <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+              <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#e2e8f0" strokeWidth="0.5" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)" />
+        </svg>
 
-          return (
-            <div key={step.id} className="step-wrapper">
-              <div className={`step-card step-${status}`}>
-                <div className="step-number">{step.id}</div>
-                <div className="step-content">
+        {/* Connection lines */}
+        <svg ref={svgRef} className="lineage-connections">
+          <defs>
+            <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L0,8 L8,4 z" fill="#cbd5e1" />
+            </marker>
+            <marker id="dot" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+              <circle cx="4" cy="4" r="3" fill="#cbd5e1" />
+            </marker>
+            <marker id="arrow-active" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L0,8 L8,4 z" fill="#4CAF50" />
+            </marker>
+            <marker id="dot-active" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+              <circle cx="4" cy="4" r="3" fill="#4CAF50" />
+            </marker>
+          </defs>
+          {renderConnections()}
+        </svg>
+
+        {/* Step cards */}
+        <div className="lineage-steps">
+          {WORKFLOW_STEPS.map((step, index) => {
+            const status = getStepStatus(step.id)
+            const data = getStepData(step.id)
+            const pos = getStepPosition(index)
+
+            return (
+              <div
+                key={step.id}
+                className={`lineage-step-card step-${status}`}
+                style={{
+                  left: pos.x,
+                  top: pos.y,
+                  width: CARD_WIDTH
+                }}
+              >
+                {/* Top accent bar */}
+                <div className="step-accent" style={{ background: step.color }} />
+
+                {/* Header */}
+                <div className="step-header">
+                  <div className="step-icon-wrapper">
+                    <span className="step-icon" style={{ fontSize: 20 }}>{step.icon}</span>
+                  </div>
+                  <div className="step-number-badge">{step.id}</div>
+                </div>
+
+                {/* Content */}
+                <div className="step-body">
                   <div className="step-title">{step.name}</div>
                   <div className="step-description">{step.description}</div>
+
                   <div className="step-status-badge">
                     {status === 'idle' && <span className="status-idle">● Pending</span>}
                     {status === 'processing' && (
@@ -77,6 +181,7 @@ export default function WorkflowVisualization({ events, isRunning }: Props) {
                     {status === 'completed' && <span className="status-completed">✓ Completed</span>}
                     {status === 'error' && <span className="status-error">✗ Error</span>}
                   </div>
+
                   {data && (
                     <div className="step-data">
                       {Object.entries(data).map(([key, value]) => (
@@ -93,14 +198,9 @@ export default function WorkflowVisualization({ events, isRunning }: Props) {
                   )}
                 </div>
               </div>
-              {index < WORKFLOW_STEPS.length - 1 && (
-                <div className={`step-arrow ${status === 'completed' ? 'active' : ''}`}>
-                  ↓
-                </div>
-              )}
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
       </div>
 
       <div className="logs-panel">

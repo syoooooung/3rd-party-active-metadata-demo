@@ -88,8 +88,8 @@
   border-radius: 6px;
   font-size: 14px;
   transition: border-color 0.2s;
-  background: var(--color-bg);
-  color: var(--color-text-primary);
+  background: white;
+  color: #1a1a1a;
 }
 
 .discovery-input:focus {
@@ -106,10 +106,10 @@
   border: 1px solid var(--color-border);
   border-radius: 6px;
   font-size: 14px;
-  background: var(--color-bg);
+  background: white;
   width: 80px;
   transition: border-color 0.2s;
-  color: var(--color-text-primary);
+  color: #1a1a1a;
 }
 
 .discovery-input-number:focus {
@@ -546,4 +546,93 @@
 
 .propose-button:active {
   transform: scale(0.98);
+}
+
+/* ===== 추천 문서 ID ===== */
+.recommended-docs {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.recommended-docs h4 {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: 12px;
+}
+
+.doc-id-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.doc-id-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.doc-id-card:hover {
+  border-color: var(--color-accent);
+  background: linear-gradient(135deg, #f1f8f4 0%, #ffffff 100%);
+  transform: translateX(2px);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.15);
+}
+
+.doc-id-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.doc-id-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: var(--color-accent-light);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+}
+
+.doc-id-count {
+  font-size: 10px;
+  font-weight: 600;
+  color: white;
+  background: var(--color-accent);
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+.doc-id-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-top: 2px;
+}
+
+.doc-id-desc {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.doc-id-chain {
+  font-size: 10px;
+  color: var(--color-text-tertiary);
+  margin-top: 4px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--color-border);
+  font-style: italic;
 }

@@ -10,7 +10,8 @@
   background: white;
   border-radius: 14px;
   padding: 16px;
-  height: fit-content;
+  max-height: calc(100vh - 72px);
+  overflow-y: auto;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
@@ -99,6 +100,8 @@
   border: 1px solid #e0e0e0;
   border-radius: 6px;
   font-size: 12px;
+  color: #1a1a1a;
+  background: white;
 }
 
 .submit-button {
@@ -139,4 +142,143 @@
     flex: 1;
     width: 100%;
   }
+}
+
+/* 데모 데이터 정보 */
+.demo-data-info {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid #eee;
+}
+
+.demo-data-info h3 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #1a1a1a;
+}
+
+.demo-data-info h4 {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.data-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  background: #f9fafb;
+  border-radius: 6px;
+  font-size: 11px;
+}
+
+.summary-label {
+  color: #666;
+  font-weight: 500;
+}
+
+.summary-value {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.file-types {
+  margin-bottom: 16px;
+}
+
+.file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.file-type-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.file-type-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  color: #4CAF50;
+  background: #f0faf0;
+  padding: 3px 8px;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.file-type-files {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 8px;
+}
+
+.file-item {
+  font-size: 11px;
+  color: #666;
+  padding: 4px 8px;
+  background: white;
+  border-left: 2px solid #4CAF50;
+  border-radius: 3px;
+}
+
+.relation-clusters {
+  margin-bottom: 16px;
+}
+
+.cluster-card {
+  padding: 10px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border: 1px solid #eee;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: all 0.2s;
+}
+
+.cluster-card:hover {
+  border-color: #4CAF50;
+  box-shadow: 0 2px 6px rgba(76, 175, 80, 0.1);
+}
+
+.cluster-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 6px;
+}
+
+.cluster-entities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.entity-tag {
+  font-size: 10px;
+  color: #4CAF50;
+  background: #f0faf0;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.cluster-doc-count {
+  font-size: 10px;
+  color: #999;
+  margin-top: 4px;
 }

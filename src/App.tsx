@@ -1,5 +1,4 @@
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
-import { useState } from 'react'
 import './App.css'
 import SearchPage from './pages/SearchPage'
 import WorkflowUpload from './components/WorkflowUpload'
@@ -18,7 +17,6 @@ const systemItems = [
 
 function App() {
   const location = useLocation()
-  const [activeNav, setActiveNav] = useState(location.pathname)
 
   return (
     <div className="app">
@@ -44,7 +42,6 @@ function App() {
               key={item.path}
               to={item.path}
               className={`nav-item ${location.pathname === item.path ? 'active' : ''}`}
-              onClick={() => setActiveNav(item.path)}
             >
               <span className="nav-icon">{item.icon}</span>
               <span className="nav-label">{item.label}</span>

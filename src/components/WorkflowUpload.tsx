@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import WorkflowVisualization from './WorkflowVisualization'
-import { mockWorkflowEvents } from '../mockData'
+import { mockWorkflowEvents, mockDataSummary } from '../mockData'
 import './WorkflowUpload.css'
 
 interface WorkflowEvent {
@@ -27,8 +27,6 @@ export default function WorkflowUpload() {
   }
 
   const handleSubmit = async () => {
-    if (!file) return
-
     setIsRunning(true)
     setEvents([])
 
@@ -118,10 +116,60 @@ export default function WorkflowUpload() {
         <button
           className="submit-button"
           onClick={handleSubmit}
-          disabled={!file || isRunning}
+          disabled={isRunning}
         >
           {isRunning ? 'Running Pipeline...' : 'Execute Pipeline'}
         </button>
+
+        {/* 데모 데이터 정보 */}
+        <div className="demo-data-info">
+          <h3>📊 데모 데이터 정보</h3>
+          <div className="data-summary">
+            <div className="summary-item">
+              <span className="summary-label">총 파일 수</span>
+              <span className="summary-value">{mockDataSummary.totalFiles}개</span>
+            </div>
+            <div className="summary-item">
+              <span className="summary-label">파일 형식</span>
+              <span className="summary-value">CSV, JSON, JSONL, TXT</span>
+            </div>
+            <div className="summary-item">
+              <span className="summary-label">데이터 유형</span>
+              <span className="summary-value">이기종 의료 데이터</span>
+            </div>
+          </div>
+
+          <div className="file-types">
+            <h4>파일 구성</h4>
+            <div className="file-list">
+              {Object.entries(mockDataSummary.fileTypes).map(([type, files]) => (
+                <div key={type} className="file-type-group">
+                  <div className="file-type-badge">{type}</div>
+                  <div className="file-type-files">
+                    {(files as string[]).map((file, idx) => (
+                      <span key={idx} className="file-item">{file}</span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="relation-clusters">
+            <h4>관계 묶음 (Relation Clusters)</h4>
+            {Object.entries(mockDataSummary.relationClusters).map(([key, cluster]) => (
+              <div key={key} className="cluster-card">
+                <div className="cluster-name">{cluster.name}</div>
+                <div className="cluster-entities">
+                  {cluster.core_entities.map((entity, idx) => (
+                    <span key={idx} className="entity-tag">{entity}</span>
+                  ))}
+                </div>
+                <div className="cluster-doc-count">{cluster.documents.length}개 문서</div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="visualization-panel">
