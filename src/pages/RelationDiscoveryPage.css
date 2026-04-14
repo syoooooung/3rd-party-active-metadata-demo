@@ -2,23 +2,21 @@
 :root {
   --color-bg: #FFFFFF;
   --color-surface: #F9FAFB;
-  --color-border: #E5E7EB;
-  --color-text-primary: #111827;
-  --color-text-secondary: #6B7280;
-  --color-text-tertiary: #9CA3AF;
-  --color-accent: #2563EB;
-  --color-accent-light: #EFF6FF;
-  --color-accent-hover: #1D4ED8;
+  --color-border: #eee;
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #666;
+  --color-text-tertiary: #aaa;
+  --color-accent: #4CAF50;
+  --color-accent-light: #f0faf0;
+  --color-accent-hover: #45a049;
 }
 
 /* ===== Layout ===== */
 .relation-discovery-page {
   flex: 1;
-  padding: 24px;
-  max-width: 1800px;
-  margin: 0 auto;
+  padding: 24px 20px;
   width: 100%;
-  background: var(--color-surface);
+  overflow: auto;
 }
 
 .discovery-layout {
@@ -56,15 +54,15 @@
 /* ===== 입력 패널 ===== */
 .discovery-panel {
   background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  padding: 20px;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .discovery-panel h2 {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 16px;
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 12px;
   color: var(--color-text-primary);
 }
 
@@ -143,9 +141,9 @@
 /* ===== 원본 문서 패널 ===== */
 .source-doc-panel {
   background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 14px;
   padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .source-doc-panel h3 {
@@ -210,9 +208,9 @@
 /* ===== 검색 전략 패널 ===== */
 .strategy-panel {
   background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 14px;
   padding: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .strategy-panel h3 {
@@ -234,9 +232,9 @@
 /* ===== 중요 키 패널 ===== */
 .keys-panel {
   background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 14px;
   padding: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .keys-panel h3 {
@@ -274,9 +272,9 @@
   min-height: 400px;
   text-align: center;
   background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 14px;
   padding: 60px 40px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .empty-icon {
@@ -301,9 +299,9 @@
 /* ===== 후보 목록 컨테이너 ===== */
 .candidates-container {
   background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 14px;
   padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .candidates-header {
@@ -346,22 +344,23 @@
 
 /* ===== 후보 카드 ===== */
 .candidate-card {
-  background: var(--color-bg);
+  background: #fafbfc;
   border: 1px solid var(--color-border);
-  border-radius: 6px;
+  border-radius: 10px;
   padding: 14px;
-  transition: all 0.15s;
+  transition: all 0.2s;
   cursor: pointer;
 }
 
 .candidate-card:hover {
-  border-color: var(--color-text-tertiary);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border-color: var(--color-accent);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.1);
+  transform: translateY(-1px);
 }
 
 .candidate-card.selected {
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 1px var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
 }
 
 .candidate-header {
