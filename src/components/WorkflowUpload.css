@@ -1,0 +1,138 @@
+.workflow-container {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.upload-panel {
+  flex: 0 0 320px;
+  background: white;
+  border: 1px solid #e1e4e8;
+  border-radius: 8px;
+  padding: 24px;
+  height: fit-content;
+}
+
+.upload-panel h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #24292e;
+}
+
+.file-input-wrapper {
+  margin-bottom: 24px;
+}
+
+.file-input-wrapper input[type='file'] {
+  width: 100%;
+  padding: 10px;
+  border: 2px dashed #d1d5da;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.file-input-wrapper input[type='file']:hover:not(:disabled) {
+  border-color: #0366d6;
+}
+
+.file-input-wrapper input[type='file']:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.file-name {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #586069;
+  word-break: break-all;
+}
+
+.options {
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #f6f8fa;
+  border-radius: 6px;
+}
+
+.options h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #24292e;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #24292e;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+
+.checkbox-label input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.option-group {
+  margin-bottom: 12px;
+}
+
+.option-group label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: #586069;
+}
+
+.option-group input[type='number'] {
+  padding: 8px;
+  border: 1px solid #d1d5da;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 12px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.submit-button:hover:not(:disabled) {
+  background: #22863a;
+}
+
+.submit-button:disabled {
+  background: #d1d5da;
+  cursor: not-allowed;
+}
+
+.visualization-panel {
+  flex: 1;
+}
+
+@media (max-width: 1024px) {
+  .workflow-container {
+    flex-direction: column;
+  }
+
+  .upload-panel {
+    flex: 1;
+    width: 100%;
+  }
+}
