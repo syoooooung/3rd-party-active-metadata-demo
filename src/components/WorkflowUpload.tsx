@@ -123,7 +123,10 @@ export default function WorkflowUpload() {
 
         {/* 데모 데이터 정보 */}
         <div className="demo-data-info">
-          <h3>📊 데모 데이터 정보</h3>
+          <h3>
+            <img src="/icons/analytics.png" alt="analytics" style={{ width: '20px', height: '20px', verticalAlign: 'middle', marginRight: '6px' }} />
+            데모 데이터 정보
+          </h3>
           <div className="data-summary">
             <div className="summary-item">
               <span className="summary-label">총 파일 수</span>

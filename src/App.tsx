@@ -5,14 +5,14 @@ import WorkflowUpload from './components/WorkflowUpload'
 import RelationDiscoveryPage from './pages/RelationDiscoveryPage'
 
 const navItems = [
-  { path: '/', icon: '🔍', label: 'Search', active: true },
-  { path: '/pipeline', icon: '⚙️', label: 'Pipeline' },
+  { path: '/', icon: '/icons/search.png', label: 'Search', active: true },
+  { path: '/pipeline', icon: '/icons/pipeline.png', label: 'Pipeline' },
   { path: '/relation-discovery', icon: '🔗', label: 'Relation Discovery' }
 ]
 
 const systemItems = [
-  { icon: '📊', label: 'Analytics' },
-  { icon: '⚙️', label: 'Settings' }
+  { icon: '/icons/analytics.png', label: 'Analytics' },
+  { icon: '/icons/settings.png', label: 'Settings' }
 ]
 
 function App() {
@@ -43,7 +43,13 @@ function App() {
               to={item.path}
               className={`nav-item ${location.pathname === item.path ? 'active' : ''}`}
             >
-              <span className="nav-icon">{item.icon}</span>
+              <span className="nav-icon">
+                {item.icon.startsWith('/icons/') ? (
+                  <img src={item.icon} alt={item.label} style={{ width: '20px', height: '20px' }} />
+                ) : (
+                  item.icon
+                )}
+              </span>
               <span className="nav-label">{item.label}</span>
             </Link>
           ))}
@@ -54,7 +60,13 @@ function App() {
           <div className="nav-section-label">SYSTEM</div>
           {systemItems.map((item, idx) => (
             <div key={idx} className="nav-item">
-              <span className="nav-icon">{item.icon}</span>
+              <span className="nav-icon">
+                {item.icon.startsWith('/icons/') ? (
+                  <img src={item.icon} alt={item.label} style={{ width: '20px', height: '20px' }} />
+                ) : (
+                  item.icon
+                )}
+              </span>
               <span className="nav-label">{item.label}</span>
             </div>
           ))}

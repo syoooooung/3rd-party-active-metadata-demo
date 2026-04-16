@@ -36,7 +36,10 @@ export default function SearchPage() {
       <div className="search-layout">
         <div className="search-sidebar">
           <div className="search-panel">
-          <h2>🔍 자연어 검색 (Semantic Search)</h2>
+          <h2>
+            <img src="/icons/search.png" alt="search" style={{ width: '24px', height: '24px', verticalAlign: 'middle', marginRight: '8px' }} />
+            자연어 검색 (Semantic Search)
+          </h2>
           <div className="search-input-group">
             <input
               type="text"

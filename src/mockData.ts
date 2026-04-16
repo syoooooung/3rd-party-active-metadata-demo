@@ -507,7 +507,7 @@ export const mockWorkflowEvents = [
   {
     step: 2,
     status: "processing" as const,
-    message: "🔍 이기종 데이터 스키마 분석 중...",
+    message: "이기종 데이터 스키마 분석 중...",
     timestamp: Date.now() / 1000 + 2
   },
   {
@@ -544,7 +544,7 @@ export const mockWorkflowEvents = [
   {
     step: 4,
     status: "processing" as const,
-    message: "🔄 데이터 정규화 및 통합 중...",
+    message: "데이터 정규화 및 통합 중...",
     timestamp: Date.now() / 1000 + 9
   },
   {

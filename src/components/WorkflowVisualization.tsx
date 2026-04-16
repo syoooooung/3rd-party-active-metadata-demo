@@ -16,9 +16,9 @@ interface Props {
 
 const WORKFLOW_STEPS = [
   { id: 1, name: 'Data Ingestion', icon: '📥', description: '입력 데이터 수신', color: '#6366f1' },
-  { id: 2, name: 'Schema Analysis', icon: '🔍', description: '데이터 구조 분석', color: '#8b5cf6' },
+  { id: 2, name: 'Schema Analysis', icon: '/icons/search.png', description: '데이터 구조 분석', color: '#8b5cf6' },
   { id: 3, name: 'Graph Construction', icon: '🕸️', description: 'Key-Value 추출 및 그래프 생성', color: '#ec4899' },
-  { id: 4, name: 'Value Normalization', icon: '⚙️', description: '데이터 정규화 및 통합', color: '#f59e0b' },
+  { id: 4, name: 'Value Normalization', icon: '/icons/settings.png', description: '데이터 정규화 및 통합', color: '#f59e0b' },
   { id: 5, name: 'Completion', icon: '✅', description: '파이프라인 완료', color: '#10b981' },
 ]
 
@@ -163,7 +163,13 @@ export default function WorkflowVisualization({ events, isRunning }: Props) {
                 {/* Header */}
                 <div className="step-header">
                   <div className="step-icon-wrapper">
-                    <span className="step-icon" style={{ fontSize: 20 }}>{step.icon}</span>
+                    <span className="step-icon" style={{ fontSize: 20 }}>
+                      {step.icon.startsWith('/icons/') ? (
+                        <img src={step.icon} alt={step.name} style={{ width: '20px', height: '20px' }} />
+                      ) : (
+                        step.icon
+                      )}
+                    </span>
                   </div>
                   <div className="step-number-badge">{step.id}</div>
                 </div>

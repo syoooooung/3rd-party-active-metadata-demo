@@ -64,7 +64,10 @@ export default function RelationDiscoveryPage() {
         {/* 좌측 입력 패널 */}
         <div className="discovery-sidebar">
           <div className="discovery-panel">
-            <h2>🔍 관계 후보 발굴</h2>
+            <h2>
+              <img src="/icons/search.png" alt="search" style={{ width: '24px', height: '24px', verticalAlign: 'middle', marginRight: '8px' }} />
+              관계 후보 발굴
+            </h2>
             <div className="discovery-input-group">
               <label className="input-label">
                 Document ID
@@ -95,7 +98,14 @@ export default function RelationDiscoveryPage() {
                 onClick={handleDiscover}
                 disabled={!sourceDocId || isLoading}
               >
-                {isLoading ? '🔄 발굴 중...' : '✨ 후보 발굴'}
+                {isLoading ? (
+                  <>
+                    <img src="/icons/refresh.png" alt="loading" style={{ width: '16px', height: '16px', verticalAlign: 'middle', marginRight: '4px' }} />
+                    발굴 중...
+                  </>
+                ) : (
+                  '✨ 후보 발굴'
+                )}
               </button>
             </div>
 
@@ -175,13 +185,17 @@ export default function RelationDiscoveryPage() {
         <div className="discovery-main">
           {!result ? (
             <div className="empty-state">
-              <div className="empty-icon">📊</div>
+              <div className="empty-icon">
+                <img src="/icons/analytics.png" alt="analytics" style={{ width: '48px', height: '48px' }} />
+              </div>
               <h3>관계 후보를 발굴하세요</h3>
               <p>Document ID를 입력하고 발굴 버튼을 클릭하세요</p>
             </div>
           ) : result.candidates.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-icon">🔍</div>
+              <div className="empty-icon">
+                <img src="/icons/search.png" alt="search" style={{ width: '48px', height: '48px' }} />
+              </div>
               <h3>후보를 찾지 못했습니다</h3>
               <p>검색 조건을 변경해보세요</p>
             </div>
