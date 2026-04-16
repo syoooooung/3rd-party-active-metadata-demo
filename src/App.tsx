@@ -4,15 +4,17 @@ import SearchPage from './pages/SearchPage'
 import WorkflowUpload from './components/WorkflowUpload'
 import RelationDiscoveryPage from './pages/RelationDiscoveryPage'
 
+const BASE_URL = import.meta.env.BASE_URL
+
 const navItems = [
-  { path: '/', icon: '/icons/search.png', label: 'Search', active: true },
-  { path: '/pipeline', icon: '/icons/pipeline.png', label: 'Pipeline' },
-  { path: '/relation-discovery', icon: '🔗', label: 'Relation Discovery' }
+  { path: '/', icon: `${BASE_URL}icons/search.png`, label: 'Search', isActive: true },
+  { path: '/pipeline', icon: `${BASE_URL}icons/pipeline.png`, label: 'Pipeline', isActive: true },
+  { path: '/relation-discovery', icon: `${BASE_URL}icons/graph.png`, label: 'Relation Discovery', isActive: true }
 ]
 
 const systemItems = [
-  { icon: '/icons/analytics.png', label: 'Analytics' },
-  { icon: '/icons/settings.png', label: 'Settings' }
+  { icon: `${BASE_URL}icons/analytics.png`, label: 'Analytics' },
+  { icon: `${BASE_URL}icons/settings.png`, label: 'Settings' }
 ]
 
 function App() {
@@ -44,13 +46,16 @@ function App() {
               className={`nav-item ${location.pathname === item.path ? 'active' : ''}`}
             >
               <span className="nav-icon">
-                {item.icon.startsWith('/icons/') ? (
+                {item.icon.includes('/icons/') ? (
                   <img src={item.icon} alt={item.label} style={{ width: '20px', height: '20px' }} />
                 ) : (
                   item.icon
                 )}
               </span>
               <span className="nav-label">{item.label}</span>
+              {item.isActive && (
+                <span className="active-badge">Active</span>
+              )}
             </Link>
           ))}
         </div>
@@ -61,7 +66,7 @@ function App() {
           {systemItems.map((item, idx) => (
             <div key={idx} className="nav-item">
               <span className="nav-icon">
-                {item.icon.startsWith('/icons/') ? (
+                {item.icon.includes('/icons/') ? (
                   <img src={item.icon} alt={item.label} style={{ width: '20px', height: '20px' }} />
                 ) : (
                   item.icon

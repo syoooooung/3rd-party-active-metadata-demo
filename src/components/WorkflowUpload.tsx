@@ -11,6 +11,8 @@ interface WorkflowEvent {
   data?: Record<string, any>
 }
 
+const BASE_URL = import.meta.env.BASE_URL
+
 export default function WorkflowUpload() {
   const [file, setFile] = useState<File | null>(null)
   const [isRunning, setIsRunning] = useState(false)
@@ -124,7 +126,7 @@ export default function WorkflowUpload() {
         {/* 데모 데이터 정보 */}
         <div className="demo-data-info">
           <h3>
-            <img src="/icons/analytics.png" alt="analytics" style={{ width: '20px', height: '20px', verticalAlign: 'middle', marginRight: '6px' }} />
+            <img src={`${BASE_URL}icons/analytics.png`} alt="analytics" style={{ width: '20px', height: '20px', verticalAlign: 'middle', marginRight: '6px' }} />
             데모 데이터 정보
           </h3>
           <div className="data-summary">

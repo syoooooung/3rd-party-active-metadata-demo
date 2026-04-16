@@ -29,6 +29,8 @@ interface DiscoveryResult {
   important_keys: string[]
 }
 
+const BASE_URL = import.meta.env.BASE_URL
+
 export default function RelationDiscoveryPage() {
   const [sourceDocId, setSourceDocId] = useState('')
   const [topK, setTopK] = useState(10)
@@ -65,7 +67,7 @@ export default function RelationDiscoveryPage() {
         <div className="discovery-sidebar">
           <div className="discovery-panel">
             <h2>
-              <img src="/icons/search.png" alt="search" style={{ width: '24px', height: '24px', verticalAlign: 'middle', marginRight: '8px' }} />
+              <img src={`${BASE_URL}icons/search.png`} alt="search" style={{ width: '24px', height: '24px', verticalAlign: 'middle', marginRight: '8px' }} />
               관계 후보 발굴
             </h2>
             <div className="discovery-input-group">
@@ -100,7 +102,7 @@ export default function RelationDiscoveryPage() {
               >
                 {isLoading ? (
                   <>
-                    <img src="/icons/refresh.png" alt="loading" style={{ width: '16px', height: '16px', verticalAlign: 'middle', marginRight: '4px' }} />
+                    <img src={`${BASE_URL}icons/refresh.png`} alt="loading" style={{ width: '16px', height: '16px', verticalAlign: 'middle', marginRight: '4px' }} />
                     발굴 중...
                   </>
                 ) : (
@@ -186,7 +188,7 @@ export default function RelationDiscoveryPage() {
           {!result ? (
             <div className="empty-state">
               <div className="empty-icon">
-                <img src="/icons/analytics.png" alt="analytics" style={{ width: '48px', height: '48px' }} />
+                <img src={`${BASE_URL}icons/analytics.png`} alt="analytics" style={{ width: '48px', height: '48px' }} />
               </div>
               <h3>관계 후보를 발굴하세요</h3>
               <p>Document ID를 입력하고 발굴 버튼을 클릭하세요</p>
@@ -194,7 +196,7 @@ export default function RelationDiscoveryPage() {
           ) : result.candidates.length === 0 ? (
             <div className="empty-state">
               <div className="empty-icon">
-                <img src="/icons/search.png" alt="search" style={{ width: '48px', height: '48px' }} />
+                <img src={`${BASE_URL}icons/search.png`} alt="search" style={{ width: '48px', height: '48px' }} />
               </div>
               <h3>후보를 찾지 못했습니다</h3>
               <p>검색 조건을 변경해보세요</p>

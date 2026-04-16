@@ -3,6 +3,8 @@ import GraphViewer from '../components/GraphViewer'
 import { mockSearchResult, mockRecommendedQueries } from '../mockData'
 import './SearchPage.css'
 
+const BASE_URL = import.meta.env.BASE_URL
+
 export default function SearchPage() {
   const [query, setQuery] = useState('')
   const [topK, setTopK] = useState(5)
@@ -37,7 +39,7 @@ export default function SearchPage() {
         <div className="search-sidebar">
           <div className="search-panel">
           <h2>
-            <img src="/icons/search.png" alt="search" style={{ width: '24px', height: '24px', verticalAlign: 'middle', marginRight: '8px' }} />
+            <img src={`${BASE_URL}icons/search.png`} alt="search" style={{ width: '24px', height: '24px', verticalAlign: 'middle', marginRight: '8px' }} />
             자연어 검색 (Semantic Search)
           </h2>
           <div className="search-input-group">
