@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import WorkflowVisualization from './WorkflowVisualization'
+import OnboardingTour, { TourStep } from './OnboardingTour'
 import { mockWorkflowEvents, mockDataSummary } from '../mockData'
 import './WorkflowUpload.css'
 
@@ -12,6 +13,39 @@ interface WorkflowEvent {
 }
 
 const BASE_URL = import.meta.env.BASE_URL
+
+const tourSteps: TourStep[] = [
+  {
+    title: '📊 데이터 업로드 및 파이프라인',
+    description: '이 기능은 이기종 데이터를 업로드하고 자동으로 처리하는 파이프라인을 실행합니다.',
+    details: [
+      '📁 입력: JSON 형식의 이기종 의료 데이터 파일',
+      '🔄 처리: 스키마 탐지, 엔티티 추출, 관계 클러스터링',
+      '📈 출력: 처리 과정을 시각적으로 보여주는 워크플로우',
+    ]
+  },
+  {
+    title: '⚙️ 파이프라인 설정',
+    description: '데이터 처리 방식을 제어하는 다양한 옵션을 설정할 수 있습니다.',
+    details: [
+      '🔍 Auto-detect Schema: 데이터 구조를 자동으로 감지 (체크박스)',
+      '📏 Sample Size: 스키마 탐지에 사용할 샘플 개수 (1-20)',
+      '🎯 Similarity Threshold: 유사도 임계값 설정 (0.0-1.0)',
+      '📦 Min Cluster Size: 최소 클러스터 크기 (1-10)',
+    ]
+  },
+  {
+    title: '🔄 워크플로우 실행',
+    description: '파이프라인 실행 과정을 단계별로 확인할 수 있습니다.',
+    details: [
+      '1️⃣ 데이터 로딩 및 검증',
+      '2️⃣ 스키마 탐지 및 분석',
+      '3️⃣ 엔티티 추출 및 임베딩',
+      '4️⃣ 관계 클러스터링 및 그래프 생성',
+      '✅ 각 단계의 성공/실패 상태를 실시간으로 확인',
+    ]
+  }
+]
 
 export default function WorkflowUpload() {
   const [file, setFile] = useState<File | null>(null)
@@ -43,6 +77,11 @@ export default function WorkflowUpload() {
 
   return (
     <div className="workflow-container">
+      <OnboardingTour
+        steps={tourSteps}
+        tourKey="pipeline-tour-completed"
+        onComplete={() => {}}
+      />
       <div className="upload-panel">
         <h2>Data Upload</h2>
 

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import OnboardingTour, { TourStep } from '../components/OnboardingTour'
 import { mockRelationDiscovery, mockRecommendedDocIds } from '../mockData'
 import './RelationDiscoveryPage.css'
 
@@ -31,6 +32,38 @@ interface DiscoveryResult {
 
 const BASE_URL = import.meta.env.BASE_URL
 
+const tourSteps: TourStep[] = [
+  {
+    title: '🔗 관계 후보 발굴',
+    description: '이 기능은 특정 문서와 연관될 수 있는 다른 문서들을 자동으로 찾아줍니다.',
+    details: [
+      '📝 입력: 기준이 되는 문서 ID (예: data_0001)',
+      '🎯 출력: 관계 가능성이 높은 후보 문서 목록과 매칭 정보',
+      '📊 Top K: 발굴할 후보 문서의 최대 개수 (1-50)',
+    ]
+  },
+  {
+    title: '📄 원본 문서 분석',
+    description: '입력한 문서의 핵심 정보를 자동으로 분석합니다.',
+    details: [
+      '🔑 중요 키: 문서에서 관계 발굴에 중요한 속성들 (★ 표시)',
+      '💾 Key-Value 쌍: 문서가 가진 모든 속성과 값',
+      '📋 검색 전략: AI가 생성한 후보 발굴 전략 설명',
+    ]
+  },
+  {
+    title: '✨ 후보 문서 결과',
+    description: '발견된 후보 문서들과 상세 매칭 정보를 제공합니다.',
+    details: [
+      '🏆 순위 및 점수: 관계 가능성 점수로 정렬된 후보들',
+      '🔗 매칭된 키: 원본 문서와 공통으로 가진 속성들',
+      '📌 매칭된 값: 실제로 일치하는 값들의 상세 정보',
+      '💡 선택 이유: AI가 해당 문서를 후보로 선정한 이유',
+      '➕ 관계 제안: 실제 관계로 등록할 수 있는 기능',
+    ]
+  }
+]
+
 export default function RelationDiscoveryPage() {
   const [sourceDocId, setSourceDocId] = useState('')
   const [topK, setTopK] = useState(10)
@@ -62,6 +95,11 @@ export default function RelationDiscoveryPage() {
 
   return (
     <div className="relation-discovery-page">
+      <OnboardingTour
+        steps={tourSteps}
+        tourKey="relation-discovery-tour-completed"
+        onComplete={() => {}}
+      />
       <div className="discovery-layout">
         {/* 좌측 입력 패널 */}
         <div className="discovery-sidebar">
