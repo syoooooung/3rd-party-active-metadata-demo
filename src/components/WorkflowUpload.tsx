@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import WorkflowVisualization from './WorkflowVisualization'
-import OnboardingTour, { TourStep } from './OnboardingTour'
+import OnboardingTour from './OnboardingTour'
+import type { TourStep } from './OnboardingTour'
 import { mockWorkflowEvents, mockDataSummary } from '../mockData'
 import './WorkflowUpload.css'
 

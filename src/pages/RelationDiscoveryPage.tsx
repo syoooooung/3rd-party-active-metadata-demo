@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import OnboardingTour, { TourStep } from '../components/OnboardingTour'
+import OnboardingTour from '../components/OnboardingTour'
+import type { TourStep } from '../components/OnboardingTour'
 import { mockRelationDiscovery, mockRecommendedDocIds } from '../mockData'
 import './RelationDiscoveryPage.css'
 

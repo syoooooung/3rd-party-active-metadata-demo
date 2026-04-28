@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import GraphViewer from '../components/GraphViewer'
-import OnboardingTour, { TourStep } from '../components/OnboardingTour'
+import OnboardingTour from '../components/OnboardingTour'
+import type { TourStep } from '../components/OnboardingTour'
 import { mockSearchResult, mockRecommendedQueries } from '../mockData'
 import './SearchPage.css'
 

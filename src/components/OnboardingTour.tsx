@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import './OnboardingTour.css'
 
-export interface TourStep {
+export type TourStep = {
   title: string
   description: string
   details?: string[]
