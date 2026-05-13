@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import GraphViewer from '../components/GraphViewer'
-import OnboardingTour from '../components/OnboardingTour'
+import OnboardingTour, { type OnboardingTourRef } from '../components/OnboardingTour'
 import type { TourStep } from '../components/OnboardingTour'
 import { mockSearchResult, mockRecommendedQueries } from '../mockData'
 import './SearchPage.css'
@@ -60,6 +60,7 @@ const tourSteps: TourStep[] = [
 ]
 
 export default function SearchPage() {
+  const tourRef = useRef<OnboardingTourRef>(null)
   const [query, setQuery] = useState('')
   const [topK, setTopK] = useState(5)
   const [results, setResults] = useState<any[]>([])
@@ -90,10 +91,18 @@ export default function SearchPage() {
   return (
     <div className="search-page">
       <OnboardingTour
+        ref={tourRef}
         steps={tourSteps}
         tourKey="search-tour-completed"
         onComplete={() => {}}
       />
+      <button
+        className="help-tour-button"
+        onClick={() => tourRef.current?.startTour()}
+        title="도움말 투어 시작"
+      >
+        ?
+      </button>
       <div className="search-layout">
         <div className="search-sidebar">
           <div className="search-panel">

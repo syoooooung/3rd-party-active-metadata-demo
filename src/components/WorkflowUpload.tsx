@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import WorkflowVisualization from './WorkflowVisualization'
-import OnboardingTour from './OnboardingTour'
+import OnboardingTour, { type OnboardingTourRef } from './OnboardingTour'
 import type { TourStep } from './OnboardingTour'
 import { mockWorkflowEvents, mockDataSummary } from '../mockData'
 import './WorkflowUpload.css'
@@ -75,6 +75,7 @@ const tourSteps: TourStep[] = [
 ]
 
 export default function WorkflowUpload() {
+  const tourRef = useRef<OnboardingTourRef>(null)
   const [file, setFile] = useState<File | null>(null)
   const [isRunning, setIsRunning] = useState(false)
   const [events, setEvents] = useState<WorkflowEvent[]>([])
@@ -105,10 +106,18 @@ export default function WorkflowUpload() {
   return (
     <div className="workflow-container">
       <OnboardingTour
+        ref={tourRef}
         steps={tourSteps}
         tourKey="pipeline-tour-completed"
         onComplete={() => {}}
       />
+      <button
+        className="help-tour-button"
+        onClick={() => tourRef.current?.startTour()}
+        title="도움말 투어 시작"
+      >
+        ?
+      </button>
       <div className="upload-panel">
         <h2>Data Upload</h2>
 

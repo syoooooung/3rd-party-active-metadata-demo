@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { driver } from 'driver.js'
+import { useEffect, useImperativeHandle, forwardRef } from 'react'
+import { driver, type DriveStep } from 'driver.js'
 import 'driver.js/dist/driver.css'
 import './OnboardingTour.css'
 
@@ -17,43 +17,62 @@ interface OnboardingTourProps {
   onComplete?: () => void
 }
 
-export default function OnboardingTour({ steps, tourKey, onComplete }: OnboardingTourProps) {
-  useEffect(() => {
-    // Check if user has already seen this tour
-    const hasSeenTour = localStorage.getItem(tourKey)
-    console.log('[OnboardingTour]', { tourKey, hasSeenTour, stepsCount: steps.length })
-
-    if (!hasSeenTour) {
-      // Small delay to ensure DOM is ready
-      const timer = setTimeout(() => {
-        console.log('[OnboardingTour] Starting driver with steps:', steps)
-
-        try {
-          const driverObj = driver({
-            showProgress: true,
-            showButtons: ['next', 'previous', 'close'],
-            steps: steps,
-            nextBtnText: '다음',
-            prevBtnText: '이전',
-            doneBtnText: '완료',
-            progressText: '{{current}}/{{total}}',
-            onDestroyed: () => {
-              console.log('[OnboardingTour] Tour completed')
-              localStorage.setItem(tourKey, 'true')
-              onComplete?.()
-            },
-            popoverClass: 'onboarding-driver-popover',
-          })
-
-          driverObj.drive()
-        } catch (error) {
-          console.error('[OnboardingTour] Error starting driver:', error)
-        }
-      }, 500)
-
-      return () => clearTimeout(timer)
-    }
-  }, [steps, tourKey, onComplete])
-
-  return null
+export interface OnboardingTourRef {
+  startTour: () => void
 }
+
+const OnboardingTour = forwardRef<OnboardingTourRef, OnboardingTourProps>(
+  ({ steps, tourKey, onComplete }, ref) => {
+    const startDriverTour = () => {
+      console.log('[OnboardingTour] Starting driver with steps:', steps)
+
+      try {
+        const driverObj = driver({
+          showProgress: true,
+          showButtons: ['next', 'previous', 'close'],
+          steps: steps as DriveStep[],
+          nextBtnText: '다음',
+          prevBtnText: '이전',
+          doneBtnText: '완료',
+          progressText: '{{current}}/{{total}}',
+          onDestroyed: () => {
+            console.log('[OnboardingTour] Tour completed')
+            localStorage.setItem(tourKey, 'true')
+            onComplete?.()
+          },
+          popoverClass: 'onboarding-driver-popover',
+        })
+
+        driverObj.drive()
+      } catch (error) {
+        console.error('[OnboardingTour] Error starting driver:', error)
+      }
+    }
+
+    // Expose startTour method to parent components
+    useImperativeHandle(ref, () => ({
+      startTour: startDriverTour,
+    }))
+
+    useEffect(() => {
+      // Check if user has already seen this tour
+      const hasSeenTour = localStorage.getItem(tourKey)
+      console.log('[OnboardingTour]', { tourKey, hasSeenTour, stepsCount: steps.length })
+
+      if (!hasSeenTour) {
+        // Small delay to ensure DOM is ready
+        const timer = setTimeout(() => {
+          startDriverTour()
+        }, 500)
+
+        return () => clearTimeout(timer)
+      }
+    }, [steps, tourKey, onComplete])
+
+    return null
+  }
+)
+
+OnboardingTour.displayName = 'OnboardingTour'
+
+export default OnboardingTour

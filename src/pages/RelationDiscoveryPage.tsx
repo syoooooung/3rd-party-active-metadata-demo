@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import OnboardingTour from '../components/OnboardingTour'
+import { useState, useRef } from 'react'
+import OnboardingTour, { type OnboardingTourRef } from '../components/OnboardingTour'
 import type { TourStep } from '../components/OnboardingTour'
 import { mockRelationDiscovery, mockRecommendedDocIds } from '../mockData'
 import './RelationDiscoveryPage.css'
@@ -79,6 +79,7 @@ const tourSteps: TourStep[] = [
 ]
 
 export default function RelationDiscoveryPage() {
+  const tourRef = useRef<OnboardingTourRef>(null)
   const [sourceDocId, setSourceDocId] = useState('')
   const [topK, setTopK] = useState(10)
   const [result, setResult] = useState<DiscoveryResult | null>(null)
@@ -110,10 +111,18 @@ export default function RelationDiscoveryPage() {
   return (
     <div className="relation-discovery-page">
       <OnboardingTour
+        ref={tourRef}
         steps={tourSteps}
         tourKey="relation-discovery-tour-completed"
         onComplete={() => {}}
       />
+      <button
+        className="help-tour-button"
+        onClick={() => tourRef.current?.startTour()}
+        title="도움말 투어 시작"
+      >
+        ?
+      </button>
       <div className="discovery-layout">
         {/* 좌측 입력 패널 */}
         <div className="discovery-sidebar">

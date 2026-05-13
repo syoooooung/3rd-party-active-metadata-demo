@@ -2,6 +2,34 @@
   flex: 1;
   padding: 24px 20px;
   overflow: auto;
+  position: relative;
+}
+
+.help-tour-button {
+  position: fixed;
+  top: 80px;
+  right: 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+  transition: all 0.3s;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.help-tour-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(52, 152, 219, 0.6);
+  background: linear-gradient(135deg, #2980b9, #21618c);
 }
 
 .search-layout {
