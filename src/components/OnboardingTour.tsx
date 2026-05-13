@@ -32,7 +32,6 @@ export default function OnboardingTour({ steps, tourKey, onComplete }: Onboardin
           nextBtnText: '다음',
           prevBtnText: '이전',
           doneBtnText: '완료',
-          closeBtnText: '✕',
           progressText: '{{current}}/{{total}}',
           onDestroyed: () => {
             localStorage.setItem(tourKey, 'true')
