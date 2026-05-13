@@ -35,33 +35,46 @@ const BASE_URL = import.meta.env.BASE_URL
 
 const tourSteps: TourStep[] = [
   {
-    title: '🔗 관계 후보 발굴',
-    description: '이 기능은 특정 문서와 연관될 수 있는 다른 문서들을 자동으로 찾아줍니다.',
-    details: [
-      '📝 입력: 기준이 되는 문서 ID (예: data_0001)',
-      '🎯 출력: 관계 가능성이 높은 후보 문서 목록과 매칭 정보',
-      '📊 Top K: 발굴할 후보 문서의 최대 개수 (1-50)',
-    ]
+    element: '.discovery-panel h2',
+    popover: {
+      title: '🔗 관계 후보 발굴',
+      description: '특정 문서와 연관될 수 있는 다른 문서들을 자동으로 찾아주는 기능입니다. AI가 문서의 속성을 분석하여 관계 가능성이 높은 문서들을 추천합니다.',
+    }
   },
   {
-    title: '📄 원본 문서 분석',
-    description: '입력한 문서의 핵심 정보를 자동으로 분석합니다.',
-    details: [
-      '🔑 중요 키: 문서에서 관계 발굴에 중요한 속성들 (★ 표시)',
-      '💾 Key-Value 쌍: 문서가 가진 모든 속성과 값',
-      '📋 검색 전략: AI가 생성한 후보 발굴 전략 설명',
-    ]
+    element: '.discovery-input-group label:first-child',
+    popover: {
+      title: '📝 Document ID 입력',
+      description: '기준이 되는 문서 ID를 입력하세요. 예시: data_0001',
+    }
   },
   {
-    title: '✨ 후보 문서 결과',
-    description: '발견된 후보 문서들과 상세 매칭 정보를 제공합니다.',
-    details: [
-      '🏆 순위 및 점수: 관계 가능성 점수로 정렬된 후보들',
-      '🔗 매칭된 키: 원본 문서와 공통으로 가진 속성들',
-      '📌 매칭된 값: 실제로 일치하는 값들의 상세 정보',
-      '💡 선택 이유: AI가 해당 문서를 후보로 선정한 이유',
-      '➕ 관계 제안: 실제 관계로 등록할 수 있는 기능',
-    ]
+    element: '.discovery-input-group label:nth-child(2)',
+    popover: {
+      title: '📊 Top K 설정',
+      description: '발굴할 후보 문서의 최대 개수를 설정합니다 (1-50). 숫자가 클수록 더 많은 후보를 확인할 수 있습니다.',
+    }
+  },
+  {
+    element: '.discovery-button',
+    popover: {
+      title: '✨ 후보 발굴 버튼',
+      description: '버튼을 클릭하거나 Enter 키를 눌러 관계 후보 발굴을 시작하세요.',
+    }
+  },
+  {
+    element: '.recommended-docs',
+    popover: {
+      title: '💡 추천 문서 ID',
+      description: '예시로 사용할 수 있는 문서 ID 목록입니다. 클릭하면 자동으로 입력란에 채워집니다.',
+    }
+  },
+  {
+    element: '.discovery-sidebar',
+    popover: {
+      title: '📄 원본 문서 및 결과',
+      description: '발굴 후, 원본 문서의 정보와 관계 가능성이 높은 후보 문서들이 이 영역에 표시됩니다. ★ 표시는 중요한 속성을 나타냅니다.',
+    }
   }
 ]
 

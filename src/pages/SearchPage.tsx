@@ -9,32 +9,53 @@ const BASE_URL = import.meta.env.BASE_URL
 
 const tourSteps: TourStep[] = [
   {
-    title: '🔍 자연어 검색 (Semantic Search)',
-    description: '이 기능은 자연어로 의료 데이터를 검색할 수 있게 해줍니다.',
-    details: [
-      '📝 입력: 자연어로 작성된 검색 쿼리 (예: "대장암 임상시험과 관련된 병원 찾기")',
-      '🎯 출력: 쿼리와 의미적으로 유사한 문서들과 관계 그래프',
-      '⚙️ Top K: 검색 결과로 반환할 최대 문서 수 설정',
-    ]
+    element: '.search-panel h2',
+    popover: {
+      title: '🔍 자연어 검색 (Semantic Search)',
+      description: '이 기능은 자연어로 의료 데이터를 검색할 수 있게 해줍니다. 일반적인 검색어가 아닌, 문장으로 질문하듯이 검색할 수 있습니다.',
+    }
   },
   {
-    title: '💡 검색 결과',
-    description: '검색 결과는 두 가지 형태로 제공됩니다.',
-    details: [
-      '📋 문서 목록: 관련도 점수와 함께 정렬된 문서들',
-      '🕸️ 관계 그래프: 문서 간의 관계를 시각적으로 표현',
-      '🔗 노드 클릭: 그래프에서 노드를 클릭하면 해당 문서로 이동',
-    ]
+    element: '.search-input',
+    popover: {
+      title: '📝 검색 입력란',
+      description: '자연어로 검색 쿼리를 입력하세요. 예시: "대장암 임상시험과 관련된 병원 찾기"',
+    }
   },
   {
-    title: '✨ 추천 검색어',
-    description: '다양한 카테고리의 예시 검색어를 제공합니다.',
-    details: [
-      '🧪 임상시험: 임상 연구 관련 검색',
-      '⚕️ 의료기기: 의료 장비 및 기기 검색',
-      '🔗 질병-기기 연관: 질병과 관련된 의료기기 탐색',
-      '🏥 병원-기술: 병원과 의료 기술의 연관성 검색',
-    ]
+    element: '.search-option',
+    popover: {
+      title: '⚙️ Top K 설정',
+      description: '검색 결과로 반환할 최대 문서 수를 설정합니다. 숫자가 클수록 더 많은 결과를 볼 수 있습니다.',
+    }
+  },
+  {
+    element: '.search-button',
+    popover: {
+      title: '🔎 검색 실행',
+      description: '검색 버튼을 클릭하거나 Enter 키를 눌러 검색을 실행하세요.',
+    }
+  },
+  {
+    element: '.recommended-queries',
+    popover: {
+      title: '💡 추천 검색어',
+      description: '다양한 카테고리의 예시 검색어를 제공합니다. 클릭하면 검색어가 자동으로 입력됩니다.',
+    }
+  },
+  {
+    element: '.results-panel',
+    popover: {
+      title: '📋 검색 결과',
+      description: '검색 결과가 관련도 점수와 함께 표시됩니다. 점수가 높을수록 검색어와 더 관련이 높습니다.',
+    }
+  },
+  {
+    element: '.graph-section',
+    popover: {
+      title: '🕸️ 관계 그래프',
+      description: '검색된 문서들 간의 관계를 시각적으로 표현합니다. 노드를 클릭하면 해당 문서로 이동할 수 있습니다.',
+    }
   }
 ]
 

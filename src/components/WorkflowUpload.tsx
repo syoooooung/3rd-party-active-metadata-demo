@@ -17,34 +17,60 @@ const BASE_URL = import.meta.env.BASE_URL
 
 const tourSteps: TourStep[] = [
   {
-    title: '📊 데이터 업로드 및 파이프라인',
-    description: '이 기능은 이기종 데이터를 업로드하고 자동으로 처리하는 파이프라인을 실행합니다.',
-    details: [
-      '📁 입력: JSON 형식의 이기종 의료 데이터 파일',
-      '🔄 처리: 스키마 탐지, 엔티티 추출, 관계 클러스터링',
-      '📈 출력: 처리 과정을 시각적으로 보여주는 워크플로우',
-    ]
+    element: '.upload-panel h2',
+    popover: {
+      title: '📊 데이터 업로드',
+      description: '이기종 의료 데이터를 업로드하고 자동으로 처리하는 파이프라인입니다. JSON 파일을 선택하여 시작하세요.',
+    }
   },
   {
-    title: '⚙️ 파이프라인 설정',
-    description: '데이터 처리 방식을 제어하는 다양한 옵션을 설정할 수 있습니다.',
-    details: [
-      '🔍 Auto-detect Schema: 데이터 구조를 자동으로 감지 (체크박스)',
-      '📏 Sample Size: 스키마 탐지에 사용할 샘플 개수 (1-20)',
-      '🎯 Similarity Threshold: 유사도 임계값 설정 (0.0-1.0)',
-      '📦 Min Cluster Size: 최소 클러스터 크기 (1-10)',
-    ]
+    element: '.file-input-wrapper',
+    popover: {
+      title: '📁 파일 선택',
+      description: 'JSON 형식의 이기종 의료 데이터 파일을 선택하세요. 파일이 선택되면 파일명이 표시됩니다.',
+    }
   },
   {
-    title: '🔄 워크플로우 실행',
-    description: '파이프라인 실행 과정을 단계별로 확인할 수 있습니다.',
-    details: [
-      '1️⃣ 데이터 로딩 및 검증',
-      '2️⃣ 스키마 탐지 및 분석',
-      '3️⃣ 엔티티 추출 및 임베딩',
-      '4️⃣ 관계 클러스터링 및 그래프 생성',
-      '✅ 각 단계의 성공/실패 상태를 실시간으로 확인',
-    ]
+    element: '.options h3',
+    popover: {
+      title: '⚙️ 파이프라인 설정',
+      description: '데이터 처리 방식을 제어하는 다양한 옵션을 설정할 수 있습니다.',
+    }
+  },
+  {
+    element: '.checkbox-label',
+    popover: {
+      title: '🔍 Auto-detect Schema',
+      description: '데이터 구조를 자동으로 감지합니다. 체크하면 스키마를 자동으로 분석하여 처리합니다.',
+    }
+  },
+  {
+    element: '.option-group:nth-of-type(1)',
+    popover: {
+      title: '📏 Sample Size',
+      description: '스키마 탐지에 사용할 샘플 개수를 설정합니다 (1-20). 샘플이 많을수록 더 정확한 스키마를 탐지합니다.',
+    }
+  },
+  {
+    element: '.option-group:nth-of-type(2)',
+    popover: {
+      title: '🎯 Similarity Threshold',
+      description: '유사도 임계값을 설정합니다 (0.0-1.0). 값이 높을수록 더 유사한 항목만 클러스터링됩니다.',
+    }
+  },
+  {
+    element: '.option-group:nth-of-type(3)',
+    popover: {
+      title: '📦 Min Cluster Size',
+      description: '최소 클러스터 크기를 설정합니다 (1-10). 이 크기 이상의 클러스터만 생성됩니다.',
+    }
+  },
+  {
+    element: '.upload-panel button',
+    popover: {
+      title: '▶️ 파이프라인 실행',
+      description: '버튼을 클릭하여 파이프라인을 실행하세요. 실행 과정을 실시간으로 확인할 수 있습니다.',
+    }
   }
 ]
 
