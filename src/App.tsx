@@ -15,11 +15,12 @@ export type ScreenProps = { go: (id: ScreenId) => void }
 
 const ADMIN_SCREENS: ScreenId[] = ['v6', 'v7']
 
-const GNB: { key: string; label: string; go?: ScreenId }[] = [
-  { key: 'find', label: '데이터 찾기', go: 'v1' },
-  { key: 'mix', label: '데이터 합치기', go: 'v3' },
-  { key: 'work', label: '내 작업' },
-  { key: 'admin', label: '수집 관리', go: 'v6' },
+const GNB: { label: string; go?: ScreenId; owns?: ScreenId[] }[] = [
+  { label: '데이터 찾기', go: 'v1', owns: ['v1', 'v2'] },
+  { label: '관계 지도', go: 'v5', owns: ['v5'] },
+  { label: '데이터 합치기', go: 'v3', owns: ['v3', 'v4'] },
+  { label: '내 작업' },
+  { label: '수집 관리', go: 'v6', owns: ['v6', 'v7'] },
 ]
 
 const SEEN = 'tour-seen'
@@ -75,9 +76,9 @@ export default function App() {
         <nav className="gnb">
           {GNB.map((m) => (
             <a
-              key={m.key}
+              key={m.label}
               href="#"
-              className={m.key === (isAdmin ? 'admin' : 'find') ? 'on' : undefined}
+              className={m.owns?.includes(screen) ? 'on' : undefined}
               onClick={(e) => {
                 e.preventDefault()
                 if (m.go) go(m.go)

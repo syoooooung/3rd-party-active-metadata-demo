@@ -107,9 +107,6 @@ export default function DatasetDetail({ go }: ScreenProps) {
             <button className="btn">XLSX 내려받기</button>
             <button className="btn">오픈API 신청</button>
             <span className="sp" />
-            <button className="btn sm" onClick={() => go('v5')}>
-              관계 지도로 보기
-            </button>
             <button className="btn sm">전체 39,412행 보기</button>
           </div>
 
@@ -134,6 +131,29 @@ export default function DatasetDetail({ go }: ScreenProps) {
         </div>
 
         <div>
+          <button className="relmap" onClick={() => go('v5')}>
+            <svg viewBox="0 0 74 60" aria-hidden="true">
+              <line x1="37" y1="30" x2="12" y2="14" />
+              <line x1="37" y1="30" x2="64" y2="17" />
+              <line x1="37" y1="30" x2="16" y2="48" />
+              <line x1="37" y1="30" x2="58" y2="47" />
+              <line x1="64" y1="17" x2="70" y2="41" />
+              <circle cx="37" cy="30" r="7.5" fill="var(--pri)" />
+              <circle cx="12" cy="14" r="4.5" fill="var(--pri)" />
+              <rect x="59.5" y="12.5" width="9" height="9" rx="2" fill="var(--acc)" />
+              <path d="M16 43l5 5-5 5-5-5z" fill="var(--ok)" />
+              <circle cx="58" cy="47" r="4.5" fill="var(--pri)" />
+              <rect x="65.5" y="36.5" width="9" height="9" rx="2" fill="var(--acc)" />
+            </svg>
+            <span className="tx">
+              <b>이어지는 데이터 10건</b>
+              <em>
+                바로 붙는 것 6건, 다른 데이터를 거쳐 붙는 것 4건. 관계 지도에서 한눈에 봅니다.
+              </em>
+            </span>
+            <span className="go" aria-hidden="true">→</span>
+          </button>
+
           <div className="card side mb16" data-tour>
             <h3>
               이 데이터와 합쳐보기 <span>3건</span>

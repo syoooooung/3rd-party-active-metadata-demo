@@ -261,14 +261,13 @@ export default function RelationMap({ go }: ScreenProps) {
             <>
               <h3>데이터 고르기</h3>
               <p className="hint">
-                지도에서 아무 데이터나 누르면
-                <br />
-                어떻게 이어지는지 여기에 나옵니다.
-                <br />
-                <br />
-                <b className="ink2">주민등록인구</b>를 눌러보세요.
-                <br />
-                직접 안 붙는데 왜 붙는지 나옵니다.
+                지도에서 아무 데이터나 누르면 어떻게 이어지는지 여기에 나옵니다.
+              </p>
+              <button className="btn p sm hintgo" onClick={() => setSelected('pop')}>
+                주민등록인구로 해보기
+              </button>
+              <p className="hint">
+                어린이집과 직접 붙지 않는 자료입니다. 무엇을 거쳐 붙는지 보여줍니다.
               </p>
             </>
           ) : (

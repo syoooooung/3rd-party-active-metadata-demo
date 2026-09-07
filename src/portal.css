@@ -33,6 +33,19 @@ body{margin:0;background:var(--bg);color:var(--ink);
 button{font:inherit;cursor:pointer}
 .num{font-variant-numeric:tabular-nums}
 
+.hintgo{width:100%;margin:2px 0 12px}
+/* 관계 지도 입구 — 상세 화면 우측 레일 맨 위 */
+.relmap{display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  background:var(--priw);border:1.5px solid var(--pri);border-radius:9px;
+  padding:13px 14px;margin-bottom:16px;color:var(--ink)}
+.relmap:hover{background:var(--srf);box-shadow:0 3px 12px rgba(21,72,158,.16)}
+.relmap svg{flex:none;width:74px;height:60px}
+.relmap svg line{stroke:var(--pri);stroke-width:1.4;opacity:.5}
+.relmap .tx{flex:1;min-width:0;display:block}
+.relmap .tx b{display:block;font-size:14px;color:var(--pri);margin-bottom:3px}
+.relmap .tx em{display:block;font-style:normal;font-size:12px;color:var(--ink2);line-height:1.6}
+.relmap .go{flex:none;color:var(--pri);font-size:16px;font-weight:700}
+
 /* ===== 온보딩 투어 ===== */
 .tourbtn{flex:none;background:var(--srf);border:1px solid var(--pri);color:var(--pri);
   border-radius:20px;padding:5px 13px;font-size:12.5px;font-weight:700}
