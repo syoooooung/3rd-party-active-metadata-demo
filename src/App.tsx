@@ -1,115 +1,103 @@
-import { Routes, Route, Link, useLocation } from 'react-router-dom'
-import './App.css'
-import SearchPage from './pages/SearchPage'
-import WorkflowUpload from './components/WorkflowUpload'
-import RelationDiscoveryPage from './pages/RelationDiscoveryPage'
+import { useState } from 'react'
+import './portal.css'
 
-const BASE_URL = import.meta.env.BASE_URL
+import Tour from './Tour'
+import SearchResults from './screens/SearchResults'
+import DatasetDetail from './screens/DatasetDetail'
+import Combine from './screens/Combine'
+import MetricResult from './screens/MetricResult'
+import RelationMap from './screens/RelationMap'
+import IngestStatus from './screens/IngestStatus'
+import ReviewQueue from './screens/ReviewQueue'
 
-const navItems = [
-  { path: '/', icon: `${BASE_URL}icons/search.png`, label: 'Search', isActive: true },
-  { path: '/pipeline', icon: `${BASE_URL}icons/pipeline.png`, label: 'Pipeline', isActive: true },
-  { path: '/relation-discovery', icon: `${BASE_URL}icons/graph.png`, label: 'Relation Discovery', isActive: true }
+export type ScreenId = 'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7'
+export type ScreenProps = { go: (id: ScreenId) => void }
+
+const ADMIN_SCREENS: ScreenId[] = ['v6', 'v7']
+
+const GNB: { key: string; label: string; go?: ScreenId }[] = [
+  { key: 'find', label: '데이터 찾기', go: 'v1' },
+  { key: 'mix', label: '데이터 합치기', go: 'v3' },
+  { key: 'work', label: '내 작업' },
+  { key: 'admin', label: '수집 관리', go: 'v6' },
 ]
 
-const systemItems = [
-  { icon: `${BASE_URL}icons/analytics.png`, label: 'Analytics' },
-  { icon: `${BASE_URL}icons/settings.png`, label: 'Settings' }
-]
+const SEEN = 'tour-seen'
 
-function App() {
-  const location = useLocation()
-
-  return (
-    <div className="app">
-      {/* Sidebar */}
-      <aside className="sidebar">
-        {/* Logo */}
-        <div className="logo-container">
-          <div className="logo-icon">A</div>
-          <span className="logo-text">Active Metadata™</span>
-        </div>
-
-        {/* Project Info */}
-        <div className="project-info">
-          <div className="project-name">Metadata Graph</div>
-          <div className="project-meta">3 modules active</div>
-        </div>
-
-        {/* Main Navigation */}
-        <div className="nav-section">
-          <div className="nav-section-label">MAIN FEATURES</div>
-          {navItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`nav-item ${location.pathname === item.path ? 'active' : ''}`}
-            >
-              <span className="nav-icon">
-                {item.icon.includes('/icons/') ? (
-                  <img src={item.icon} alt={item.label} style={{ width: '20px', height: '20px' }} />
-                ) : (
-                  item.icon
-                )}
-              </span>
-              <span className="nav-label">{item.label}</span>
-              {item.isActive && (
-                <span className="active-badge">Active</span>
-              )}
-            </Link>
-          ))}
-        </div>
-
-        {/* System Section */}
-        <div className="nav-section">
-          <div className="nav-section-label">SYSTEM</div>
-          {systemItems.map((item, idx) => (
-            <div key={idx} className="nav-item">
-              <span className="nav-icon">
-                {item.icon.includes('/icons/') ? (
-                  <img src={item.icon} alt={item.label} style={{ width: '20px', height: '20px' }} />
-                ) : (
-                  item.icon
-                )}
-              </span>
-              <span className="nav-label">{item.label}</span>
-            </div>
-          ))}
-        </div>
-
-        <div className="sidebar-spacer" />
-
-        {/* Bottom Section */}
-        <div className="sidebar-bottom">
-          <div className="nav-item">
-            <span className="nav-icon">🔔</span>
-            <span className="nav-label">Notifications</span>
-            <span className="notification-badge">3</span>
-          </div>
-          <div className="nav-item">
-            <span className="nav-icon">💬</span>
-            <span className="nav-label">Support</span>
-          </div>
-          <div className="user-profile">
-            <div className="user-avatar">U</div>
-            <div className="user-info">
-              <div className="user-name">User Admin</div>
-              <div className="user-role">Administrator</div>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <main className="main-container">
-        <Routes>
-          <Route path="/" element={<SearchPage />} />
-          <Route path="/pipeline" element={<WorkflowUpload />} />
-          <Route path="/relation-discovery" element={<RelationDiscoveryPage />} />
-        </Routes>
-      </main>
-    </div>
-  )
+const seenTour = () => {
+  try {
+    return sessionStorage.getItem(SEEN) === '1'
+  } catch {
+    return false
+  }
 }
 
-export default App
+export default function App() {
+  const [screen, setScreen] = useState<ScreenId>('v1')
+  const [tour, setTour] = useState<number | null>(() => (seenTour() ? null : 0))
+  const isAdmin = ADMIN_SCREENS.includes(screen)
+
+  const go = (id: ScreenId) => {
+    setScreen(id)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const setTourStep = (s: number | null) => {
+    setTour(s)
+    if (s == null) {
+      try {
+        sessionStorage.setItem(SEEN, '1')
+      } catch {
+        /* 저장 못 해도 투어 동작에는 영향 없음 */
+      }
+    }
+  }
+
+  return (
+    <>
+      <header className="hdr">
+        <div className="in">
+          <span className="brand">
+            ThirdEye<em>써드파티 데이터 포털</em>
+          </span>
+          <form className="sform" onSubmit={(e) => e.preventDefault()}>
+            <input defaultValue="어린이집" aria-label="데이터 검색" />
+            <button type="submit">검색</button>
+          </form>
+          <button className="tourbtn" onClick={() => setTour(0)}>
+            둘러보기
+          </button>
+          <span className="me">
+            <span className="av">{isAdmin ? '오' : '황'}</span>
+            <span>{isAdmin ? '오재욱 · 운영관리자' : '황세영 · 성남시'}</span>
+          </span>
+        </div>
+        <nav className="gnb">
+          {GNB.map((m) => (
+            <a
+              key={m.key}
+              href="#"
+              className={m.key === (isAdmin ? 'admin' : 'find') ? 'on' : undefined}
+              onClick={(e) => {
+                e.preventDefault()
+                if (m.go) go(m.go)
+              }}
+            >
+              {m.label}
+            </a>
+          ))}
+        </nav>
+      </header>
+
+      {screen === 'v1' && <SearchResults go={go} />}
+      {screen === 'v2' && <DatasetDetail go={go} />}
+      {screen === 'v3' && <Combine go={go} />}
+      {screen === 'v4' && <MetricResult go={go} />}
+      {screen === 'v5' && <RelationMap go={go} />}
+      {screen === 'v6' && <IngestStatus go={go} />}
+      {screen === 'v7' && <ReviewQueue go={go} />}
+
+      {tour != null && <Tour step={tour} setStep={setTourStep} go={go} />}
+    </>
+  )
+}

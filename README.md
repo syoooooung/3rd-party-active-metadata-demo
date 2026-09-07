@@ -1,37 +1,99 @@
-# Active Metadata Graph - Demo
+# Active Metadata Graph — 포털 데모
 
-This is a static demo of the Active Metadata Graph project, showcasing its key-value graph-based metadata management and relation discovery capabilities.
+**"어린이집이 인구 대비 충분한가"를 알려면 공공데이터포털에서 시설 목록을, 통계청에서 인구를 받아 엑셀에서 지역 이름을 맞춰야 합니다. 이걸 클릭 한 번으로 만들면 어떨까?**
 
-## 🎯 About
+공공데이터포털에는 어린이집 데이터가 196건 있습니다. 그중 103건은 **지자체마다 따로 올린 같은 형식의 자료**이고, 전국을 취합해 둔 통합본이 따로 있습니다. 사용자는 그걸 모른 채 목록을 훑습니다.
+통계청 인구와 붙이려면 지역 표기가 `성남시`와 `경기도 성남시`로 달라 손으로 맞춰야 합니다.
+2024년 공공데이터 활용기업 실태조사에서 **15.8%가 "공공데이터 간 결합·연계 활용이 원활하지 않다"** 를 애로로 꼽았습니다.
 
-This demo demonstrates a knowledge graph system that:
-- **Graph Search**: Search and visualize key-value relationships in a knowledge graph
-- **Data Pipeline**: Execute data ingestion and graph construction workflows
-- **Relation Discovery**: Discover and propose relationships between documents based on shared attributes
+이 데모는 그 문제를 **데이터셋 간 관계를 미리 만들어 두는 것**으로 푸는 시스템의 화면입니다.
+메타데이터를 표준 카탈로그로 통합하고, 데이터셋 사이의 관계를 자동 생성해, 사용자가 "무엇을 어떻게 붙일 수 있는지"를 찾아 헤매지 않게 합니다.
 
-## 🚀 Features
+**Live Demo**: https://syoooooung.github.io/3rd-party-active-metadata-demo/
 
-### 1. Graph Search
-- Semantic search across documents
-- Interactive graph visualization
-- Real-time graph exploration
+---
 
-### 2. Pipeline Execution
-- Data upload and processing
-- Schema auto-detection
-- Value normalization
-- Real-time progress tracking
+## 데모에서 볼 수 있는 것
 
-### 3. Relation Discovery
-- Candidate relationship detection
-- Multi-factor similarity scoring
-- Attribute-based matching
-- Relationship proposal
+들어가면 **둘러보기**가 자동으로 시작해 8단계로 화면을 짚어 줍니다. 헤더의 `둘러보기` 버튼으로 다시 볼 수 있고, 건너뛰고 직접 돌아다녀도 됩니다. 사용자 화면 5개와 운영 화면 2개입니다.
 
-## 📦 Tech Stack
+### 사용자 화면 — 찾고, 붙이고, 지표를 만든다
 
-- **Frontend**: React + TypeScript
-- **Build Tool**: Vite
-- **Routing**: React Router
-- **Visualization**: vis-network
-- **Deployment**: GitHub Pages
+| 화면 | 무엇을 보여주나 |
+|---|---|
+| **1. 검색 결과** | 196건을 나열하지 않는다. 전국 통합본을 먼저 제시하고, 같은 형식의 지자체 자료 103건은 **하나로 접어** 보여준다 |
+| **2. 데이터 상세** | 데이터 미리보기와 함께 "이 데이터와 합쳐보기 3건", "대신 쓸 수 있는 것", "함께 받은 것"을 관계 근거로 제안 |
+| **3. 합치기** | 두 자료의 결합 키를 자동 제시. **지역 표기 차이를 맞춘 결과와 묶이지 않은 3곳**을 명시 |
+| **4. 만들어진 지표** | 시군구별 영유아 1천 명당 어린이집 수. 항목명을 눌러 정렬 |
+| **5. 관계 지도** | 기준 데이터셋에서 이어지는 관계를 그래프로. **직접 붙지 않는 데이터는 무엇을 거치면 붙는지 경로로** 제시 |
+
+### 운영 화면 — 수집한 메타데이터를 표준 카탈로그에 올린다
+
+| 화면 | 무엇을 보여주나 |
+|---|---|
+| **6. 수집 현황** | 수집 → 매핑 → 검토 대기 → 등재 단계별 현황과 실행 이력 |
+| **7. 등재 검토** | 자동 확정 기준(유사도 0.90) 미달 건. **원본 항목의 실제 값과 함께** 후보를 제시하고, 기존 카탈로그 항목과 중복인지 판정 |
+
+### 이 데모가 설명하려는 것
+
+- **검색 결과를 관계로 묶으면 무엇이 달라지는가** — 103건을 훑는 대신 통합본 1건으로 끝난다
+- **직접 붙지 않는 데이터를 어떻게 잇는가** — 법정동 코드를 거치면 통계청 자료와 붙는다. 목록으로는 표현할 수 없어 그래프가 필요하다
+- **자동 매핑을 사람이 어떻게 검토하는가** — 후보·추천·결정을 분리해 기록하고, 확신이 부족한 항목만 사람에게 올린다
+
+> 화면 데모입니다. 데이터는 목이지만 **실제 공공데이터포털·국가통계포털의 데이터셋 이름과 건수**를 씁니다.
+> 관계 유형과 임계값도 실제 설계값입니다.
+
+---
+
+## 실제 시스템은 어떻게 동작하나
+
+세 개의 서비스가 파이프라인을 이룹니다.
+
+```
+[수집]  Airflow ETL — 공공데이터포털·KOSIS·의료기관정보·영화DB 등
+        이기종 소스의 메타데이터(Schema.org / DCAT / SDMX / JSON-LD)를 수집해 원본 그대로 보존
+   ↓
+[통합]  DCAT 3.0 기반 통합 카탈로그 — 원본은 불변 스냅샷으로 보존,
+        자동 매핑 결과는 Draft로 만들어 검토·승인 후 게시, 전 과정 계보(lineage) 추적
+   ↓
+[분석]  AI 컬럼 연관성 분석 — Transformer 임베딩 + XGBoost 타입 분류를 결합해
+        서로 다른 테이블의 컬럼 간 유사 속성을 탐지, 매칭 결과가 카탈로그 자동 매핑에 연결
+```
+
+**설계에서 정한 것들** (데모 화면에 그대로 반영돼 있습니다)
+
+- **파생값은 저장하지 않는다.** 변화량·순위·집계치는 원본 관측값에서 조회 시점에 계산한다. 수집 누락이나 값 보정이 생겨도 후행 구간을 다시 계산할 필요가 없다
+- **유사도 판정은 9단계 등급.** 완전 동일 1.00부터 하위·유사 항목 0.50까지. 자동 확정 기준은 0.90 — 0.70~0.90 구간을 시험해 정확도 저하 없이 과탐만 줄어드는 값으로 정했다
+- **매핑 근거는 3계층으로 기록.** 후보 목록 · 알고리즘 추천 · 최종 결정을 분리해 저장한다. 추천 목록에 없는 값을 결정하면 별도 표기한다
+- **식별자는 무손실 보존.** 데이터셋의 60%만 자체 식별자를 갖고 그중 50%만 URI 형태라, 주 식별자 하나로는 동일 데이터셋을 판별할 수 없다. 수집 과정에서 붙은 식별자를 모두 보존해 병합 판정에 쓴다
+- 유사 속성 탐지 성능: 공개 벤치마크 12종 기준 **F1 평균 0.87** (baseline 0.72 → 0.94까지 개선된 데이터셋도 있음)
+- 관계 생성 연구 확장: **GraphSAGE(GNN) 기반 Schema.org ↔ DCAT 속성 정렬 예측**, LLM 기반 관계 생성, 그래프 정규화(표기가 다른 동일 개체 자동 연결) POC
+
+**스택** — FastAPI · PostgreSQL(JSONB) · DCAT 3.0 · Apache Airflow · MinIO · XGBoost · Transformers · PyTorch Geometric · Neo4j · React
+
+---
+
+## 실행
+
+```bash
+npm install
+npm run dev
+```
+
+이 데모는 React + TypeScript + Vite로 만들었고, 외부 런타임 의존성은 React뿐입니다.
+관계 지도는 라이브러리 없이 SVG로 직접 그렸습니다 — 노드 위치를 각도와 단계 수로 계산해 **항상 같은 배치**가 나오도록 했습니다.
+온보딩 투어도 투어 라이브러리 없이, 대상 요소에 큰 `box-shadow`를 줘서 주변만 어둡게 하는 방식으로 만들었습니다 (오버레이 DOM이 없어 하이라이트된 요소를 그대로 클릭할 수 있습니다).
+
+```
+src/
+  App.tsx          화면 셸 — 헤더, 메뉴, 화면 전환
+  Tour.tsx         온보딩 투어 8단계
+  data.ts          목 데이터와 관계 그래프 정의
+  portal.css       화면 스타일 (라이트·다크 both)
+  screens/         화면 7개
+```
+
+---
+
+이 시스템의 관계 자동 탐색 아이디어로 특허를 출원했습니다 (10-2026-0068848, 제1발명자).
+설계 과정과 회고는 [케이스 스터디](https://syoooooung.github.io/portfolio/works/data-relation.html)에 정리해 두었습니다.
