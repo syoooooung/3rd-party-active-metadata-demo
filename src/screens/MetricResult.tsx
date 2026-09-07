@@ -43,7 +43,7 @@ export default function MetricResult({ go }: ScreenProps) {
             go('v3')
           }}
         >
-          데이터 합치기
+          데이터 통합
         </a>{' '}
         › 결과
       </p>

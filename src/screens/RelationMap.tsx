@@ -319,7 +319,7 @@ export default function RelationMap({ go }: ScreenProps) {
                   ) : (
                     <>
                       <button className="btn p sm" onClick={() => go('v3')}>
-                        합쳐보기
+                        같이 쓰기
                       </button>
                       <button className="btn sm" onClick={() => go('v2')}>
                         데이터 보기

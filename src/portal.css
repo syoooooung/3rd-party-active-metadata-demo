@@ -34,6 +34,39 @@ button{font:inherit;cursor:pointer}
 .num{font-variant-numeric:tabular-nums}
 
 .hintgo{width:100%;margin:2px 0 12px}
+/* 데이터 통합 — 항목 대응 / 값 표기 클러스터 */
+.mix.slim .join{padding-top:14px}
+
+.pairs{border:1px solid var(--ln);border-radius:7px;overflow:hidden;background:var(--srf)}
+.pr{display:grid;grid-template-columns:1fr 26px 1fr auto;gap:12px;align-items:center;
+  padding:11px 14px;border-top:1px solid var(--ln2)}
+.pr:first-child{border-top:0}
+.pr.key{background:var(--priw)}
+.pr.wide{grid-template-columns:170px 1fr}
+.pr .a,.pr .b{min-width:0;display:block}
+.pr .nm{display:block;font-size:13.5px;font-weight:500;color:var(--ink)}
+.pr .ds{display:block;font-size:11px;color:var(--mut)}
+.pr .ar{text-align:center;color:var(--pri);font-weight:700;font-size:15px}
+.pr .why{font-size:12.5px;color:var(--ink2);line-height:1.6}
+.pr .tg{flex:none;font-size:11px;font-weight:700;color:var(--mut);
+  background:var(--srf3);border-radius:20px;padding:3px 10px;white-space:nowrap}
+.pr .tg.pri{color:#fff;background:var(--pri)}
+
+.clus{display:flex;flex-direction:column;gap:8px}
+.cu{display:grid;grid-template-columns:190px 20px 1fr;gap:10px;align-items:center}
+.cu .rep{font-size:13.5px;font-weight:500;color:var(--pri)}
+.cu .ar{text-align:center;color:var(--mut);font-weight:700}
+.cu .vs{display:flex;gap:6px;flex-wrap:wrap}
+.cu .vs em{font-style:normal;font-size:12px;color:var(--ink2);
+  background:var(--srf3);border:1px solid var(--ln);border-radius:20px;padding:2px 9px}
+
+@media (max-width:720px){
+  .pr{grid-template-columns:1fr;gap:4px}
+  .pr .ar{text-align:left}
+  .cu{grid-template-columns:1fr;gap:4px}
+  .cu .ar{display:none}
+}
+
 /* 관계 지도 입구 — 상세 화면 우측 레일 맨 위 */
 .relmap{display:flex;align-items:center;gap:12px;width:100%;text-align:left;
   background:var(--priw);border:1.5px solid var(--pri);border-radius:9px;

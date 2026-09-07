@@ -156,7 +156,7 @@ export default function DatasetDetail({ go }: ScreenProps) {
 
           <div className="card side mb16" data-tour>
             <h3>
-              이 데이터와 합쳐보기 <span>3건</span>
+              같이 쓸 수 있는 데이터 <span>3건</span>
             </h3>
             {COMBINE.map((c) => (
               <div className="sug" key={c.title}>
@@ -171,7 +171,7 @@ export default function DatasetDetail({ go }: ScreenProps) {
                   className={c.primary ? 'btn p sm' : 'btn sm'}
                   onClick={() => go('v3')}
                 >
-                  합쳐보기
+                  같이 쓰기
                 </button>
               </div>
             ))}
