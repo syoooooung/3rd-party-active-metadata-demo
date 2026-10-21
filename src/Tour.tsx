@@ -1,39 +1,56 @@
 import { useEffect } from 'react'
 import type { ScreenId } from './App'
 
-type Step = { screen: ScreenId; title: string; body: string; spot?: boolean; sel?: string }
+export type Step = {
+  screen: ScreenId
+  /** detail 화면에서 열 데이터 */
+  dataset?: string
+  /** detail 화면 보기 모드 */
+  view?: 'map'
+  /** search 화면에서 연계 데이터 패널을 미리 펼칠 카드 */
+  links?: string
+  /** 하이라이트할 요소 (기본 [data-tour]) */
+  sel?: string
+  spot?: boolean
+  title: string
+  body: string
+}
 
 /** 처음 들어온 사람이 이 포털이 무엇을 하는지 7단계로 따라가게 한다. */
 export const STEPS: Step[] = [
   {
-    screen: 'v1',
-    title: '흩어진 공공데이터를 관계로 이어주는 포털입니다',
-    body: '어린이집이 인구 대비 충분한지 보려면, 지금은 공공데이터포털에서 시설 목록을 받고 통계청에서 인구를 따로 받아 엑셀에서 지역 이름을 맞춰야 합니다. 그 일을 포털이 대신하면 어떻게 되는지 7단계로 보여드립니다.',
+    screen: 'home',
+    title: '공공데이터와 기관 보유 데이터를 관계로 이어주는 포털입니다',
+    body: '외부 개방 데이터 7,470개와 실증 기관이 올린 보유 데이터를 한곳에서 찾습니다. 데이터를 올리면 함께 쓸 수 있는 데이터를 포털이 자동으로 판정해 둡니다. 어떻게 쓰는지 7단계로 보여드립니다.',
   },
   {
-    screen: 'v1',
+    screen: 'home',
     spot: true,
-    title: '같은 자료 103건은 접어서 보여줍니다',
-    body: '“어린이집” 검색 결과 196건 중 103건은 지자체가 각자 올린 같은 형식의 자료입니다. 데이터셋 사이의 관계를 미리 판정해 두기 때문에, 전국 통합본을 먼저 내놓고 나머지는 “동종 판본” 한 줄로 접을 수 있습니다.',
+    title: '실증 기관의 보유 데이터에서 시작합니다',
+    body: 'A방송사는 방송 프로그램·회차·출연진을, B대학병원은 의료데이터의 메타데이터를 올렸습니다. 원본 데이터가 아니라 메타데이터를 기준으로, 결합해 쓸 수 있는 외부 개방 데이터를 찾아 줍니다.',
   },
   {
-    screen: 'v2',
+    screen: 'search',
+    links: 'kcure',
+    spot: true,
+    title: '검색 결과에서 연계 데이터를 바로 펼쳐 봅니다',
+    body: '카드의 "연계 데이터"를 누르면 그 자리에서 관계 지도가 열립니다. 가운데가 이 데이터, 가지 끝이 함께 쓸 수 있는 데이터입니다. 속성 보완 · 집계 맥락 · 동종 판본 — 같이 보여주는 이유가 가지마다 다릅니다.',
+  },
+  {
+    screen: 'detail',
+    dataset: 'cancer-lib',
     spot: true,
     title: '함께 쓸 수 있는 데이터를 관계 유형별로 묶습니다',
-    body: '무엇을 붙일 수 있는지 사용자가 검색으로 찾아 헤맬 필요가 없습니다. 속성 보완 · 집계 맥락 · 인접 맥락 · 동종 판본 네 유형으로 묶고, 무엇을 기준으로 붙는지(결합 키)와 판정 신뢰도까지 근거로 함께 보여줍니다.',
+    body: '속성 보완 · 집계 맥락 · 인접 맥락 · 동종 판본 네 유형으로 묶고, 결합 키와 판정 신뢰도를 근거로 붙입니다. 확신도 0.6~0.85 구간은 자동 확정하지 않고 검토 대기로 남깁니다. 포털의 판정은 결합 키·정규화 필요 여부까지고, 실제 결합은 이 판정을 받아 수행됩니다.',
   },
   {
-    screen: 'v2',
-    spot: true,
-    sel: '[data-tour-boundary]',
-    title: '판정까지가 이 포털의 몫입니다',
-    body: '결합 키, “성남시 ↔ 경기도 성남시” 같은 값 정규화 필요 여부, 미결합 예상까지 판정해 전달합니다. 실제 결합 실행과 지표 계산은 이 판정을 받은 결합 기능이 수행합니다. 확신도 0.6~0.85 구간의 관계는 자동 확정하지 않고 검토 대기로 남깁니다.',
-  },
-  {
-    screen: 'v5',
+    screen: 'detail',
+    dataset: 'cancer-lib',
+    view: 'map',
+    sel: '[data-tour-map]',
     spot: true,
     title: '직접 안 붙는 데이터는 경로로 보여줍니다',
-    body: '어린이집과 주민등록인구는 바로 붙지 않지만 법정동 코드를 거치면 붙습니다. 목록으로는 이걸 표현할 수 없어서 지도가 필요합니다. 지금 노드를 눌러보셔도 됩니다.',
+    body: '암 환자 데이터와 국가 암 유병률 통계는 암종 표기가 달라 바로 붙지 않습니다. KCD 질병분류 코드를 거치면 붙습니다. 목록으로는 표현할 수 없어서 지도가 필요합니다. 노드를 눌러보셔도 됩니다.',
   },
   {
     screen: 'v6',
@@ -52,13 +69,10 @@ export const STEPS: Step[] = [
 type Props = {
   step: number
   setStep: (s: number | null) => void
-  go: (id: ScreenId) => void
 }
 
-export default function Tour({ step, setStep, go }: Props) {
+export default function Tour({ step, setStep }: Props) {
   const cur = STEPS[step]
-
-  useEffect(() => go(cur.screen), [cur.screen])
 
   useEffect(() => {
     if (!cur.spot) return
@@ -68,12 +82,12 @@ export default function Tour({ step, setStep, go }: Props) {
       if (!el) return
       el.classList.add('tour-hl')
       el.scrollIntoView({ block: 'center', behavior: 'smooth' })
-    }, 120)
+    }, 220)
     return () => {
       window.clearTimeout(t)
       document.querySelector('.tour-hl')?.classList.remove('tour-hl')
     }
-  }, [step, cur.spot])
+  }, [step, cur.spot, cur.sel])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
