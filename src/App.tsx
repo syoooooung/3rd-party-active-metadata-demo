@@ -4,13 +4,11 @@ import './portal.css'
 import Tour from './Tour'
 import SearchResults from './screens/SearchResults'
 import DatasetDetail from './screens/DatasetDetail'
-import Combine from './screens/Combine'
-import MetricResult from './screens/MetricResult'
 import RelationMap from './screens/RelationMap'
 import IngestStatus from './screens/IngestStatus'
 import ReviewQueue from './screens/ReviewQueue'
 
-export type ScreenId = 'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7'
+export type ScreenId = 'v1' | 'v2' | 'v5' | 'v6' | 'v7'
 export type ScreenProps = { go: (id: ScreenId) => void }
 
 const ADMIN_SCREENS: ScreenId[] = ['v6', 'v7']
@@ -18,7 +16,6 @@ const ADMIN_SCREENS: ScreenId[] = ['v6', 'v7']
 const GNB: { label: string; go?: ScreenId; owns?: ScreenId[] }[] = [
   { label: '데이터 찾기', go: 'v1', owns: ['v1', 'v2'] },
   { label: '관계 지도', go: 'v5', owns: ['v5'] },
-  { label: '데이터 통합', go: 'v3', owns: ['v3', 'v4'] },
   { label: '내 작업' },
   { label: '수집 관리', go: 'v6', owns: ['v6', 'v7'] },
 ]
@@ -92,8 +89,6 @@ export default function App() {
 
       {screen === 'v1' && <SearchResults go={go} />}
       {screen === 'v2' && <DatasetDetail go={go} />}
-      {screen === 'v3' && <Combine go={go} />}
-      {screen === 'v4' && <MetricResult go={go} />}
       {screen === 'v5' && <RelationMap go={go} />}
       {screen === 'v6' && <IngestStatus go={go} />}
       {screen === 'v7' && <ReviewQueue go={go} />}

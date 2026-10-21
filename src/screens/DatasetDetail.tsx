@@ -1,31 +1,8 @@
 import { useState } from 'react'
 import type { ScreenProps } from '../App'
-import { PREVIEW_ROWS, SNAPSHOTS } from '../data'
+import { LINK_CANDIDATES, LINK_GROUPS, PREVIEW_ROWS, REL_TYPES, SNAPSHOTS } from '../data'
 
-const COMBINE = [
-  {
-    title: '주민등록인구 (연령별·시군구)',
-    why: ['시군구가 같아 바로 붙습니다. 합치면 ', '영유아 1천 명당 어린이집 수', '를 지역별로 낼 수 있습니다.'],
-    from: '국가통계포털 · 매월 갱신',
-    primary: true,
-  },
-  {
-    title: '어린이집 교직원 현황',
-    why: ['같은 시설코드를 쓰고 있어 시설 단위로 붙습니다. 합치면 ', '교사 1인당 아동 수', '가 나옵니다.'],
-    from: '한국사회보장정보원 · 2026-05-29',
-  },
-  {
-    title: '시군구별 출생아 수',
-    why: ['시군구와 연도가 같아 붙습니다. 합치면 ', '수요 증감 추이', '를 볼 수 있습니다.'],
-    from: '국가통계포털 · 연 1회',
-  },
-]
-
-const CO_USED = [
-  ['유치원 현황', '412명이 함께 받았습니다'],
-  ['주민등록인구 (연령별·시군구)', '388명이 함께 받았습니다'],
-  ['법정동 코드 연계정보', '156명이 함께 받았습니다'],
-]
+const LINK_COUNT = LINK_GROUPS.reduce((n, g) => n + g.items.length, 0)
 
 export default function DatasetDetail({ go }: ScreenProps) {
   const [snap, setSnap] = useState(0)
@@ -156,51 +133,97 @@ export default function DatasetDetail({ go }: ScreenProps) {
 
           <div className="card side mb16" data-tour>
             <h3>
-              같이 쓸 수 있는 데이터 <span>3건</span>
+              함께 쓸 수 있는 데이터 <span>{LINK_COUNT}건</span>
             </h3>
-            {COMBINE.map((c) => (
-              <div className="sug" key={c.title}>
-                <div className="t">{c.title}</div>
-                <p className="w">
-                  {c.why[0]}
-                  <b>{c.why[1]}</b>
-                  {c.why[2]}
-                </p>
-                <p className="f">{c.from}</p>
-                <button
-                  className={c.primary ? 'btn p sm' : 'btn sm'}
-                  onClick={() => go('v3')}
-                >
-                  같이 쓰기
-                </button>
-              </div>
-            ))}
+            <p className="lgnote">
+              결합하거나 비교해 쓸 수 있는 데이터를 <b>관계 유형별로</b> 보여줍니다. 자동 판정으로
+              확정 {LINK_COUNT}건, 확신도 0.6~0.85 구간 2건은 검토 대기로 남아 있습니다.
+            </p>
+
+            {LINK_GROUPS.map((g) => {
+              const t = REL_TYPES[g.type]
+              const rows = g.items.map((it) => (
+                <div className="sug" key={it.title}>
+                  <div className="t">
+                    {it.title}
+                    {it.sub && <span className="subchip">{it.sub}</span>}
+                  </div>
+                  <p className="w">{it.reason}</p>
+                  <p className="f">
+                    {it.provider} · 결합 키 <code className="jk">{it.joinKey}</code> · 신뢰도{' '}
+                    <span className="num">{it.score.toFixed(2)}</span>
+                  </p>
+                  {it.detail && (
+                    <details className="jdetail">
+                      <summary>판정 상세</summary>
+                      <ul>
+                        {it.detail.normalize && (
+                          <li>
+                            <b>값 정규화 필요</b> — {it.detail.normalize}
+                          </li>
+                        )}
+                        {it.detail.unmatched && (
+                          <li>
+                            <b>미결합 예상</b> — {it.detail.unmatched}
+                          </li>
+                        )}
+                      </ul>
+                    </details>
+                  )}
+                </div>
+              ))
+
+              const head = (
+                <>
+                  <span className="dot" style={{ background: t.color }} />
+                  <span className="gl">{t.label}</span>
+                  <span className="gc num">{g.items.length}건</span>
+                  <span className="gd">{t.desc}</span>
+                </>
+              )
+
+              return g.type === 'SAME_KIND' ? (
+                <details className="lgroup" key={g.type}>
+                  <summary>{head}</summary>
+                  {rows}
+                </details>
+              ) : (
+                <div className="lgroup open" key={g.type}>
+                  <div className="lhead">{head}</div>
+                  {rows}
+                </div>
+              )
+            })}
+
+            <details className="lgroup">
+              <summary>
+                <span className="dot" style={{ background: 'var(--mut)' }} />
+                <span className="gl">관계 미확정 유사 데이터</span>
+                <span className="gc num">{LINK_CANDIDATES.length}건</span>
+                <span className="gd">의미는 비슷하지만 판정 근거가 부족해 확정하지 않았습니다</span>
+              </summary>
+              {LINK_CANDIDATES.map((c) => (
+                <div className="sug" key={c.title}>
+                  <div className="t">{c.title}</div>
+                  <p className="f">
+                    {c.provider} · 의미 유사도 <span className="num">{c.sim.toFixed(2)}</span>
+                  </p>
+                </div>
+              ))}
+            </details>
+
+            <div className="lgfoot">
+              <button className="btn sm">연계 데이터 CSV</button>
+              <button className="btn sm">연동 API 복사</button>
+            </div>
           </div>
 
-          <div className="card side mb16">
-            <h3>이 자료 대신 쓸 수 있는 것</h3>
-            <div className="sug">
-              <div className="t">지역별 어린이집 현황 103건</div>
-              <p className="w">한 지역만 필요하면 해당 지자체 자료가 더 가볍습니다.</p>
-              <button className="btn sm" onClick={() => go('v1')}>
-                지역 목록 보기
-              </button>
-            </div>
-            <div className="sug">
-              <div className="t">같은 자료 오픈API</div>
-              <p className="w">매일 자동으로 받아가려면 API가 편합니다. 항목은 같습니다.</p>
-              <button className="btn sm">API 문서 보기</button>
-            </div>
-          </div>
-
-          <div className="card side">
-            <h3>이 데이터를 받은 분들이 함께 받은 것</h3>
-            {CO_USED.map(([title, note]) => (
-              <div className="sug" key={title}>
-                <div className="t">{title}</div>
-                <p className="f">{note}</p>
-              </div>
-            ))}
+          <div className="card side bound" data-tour-boundary>
+            <h3>판정까지가 이 포털의 몫입니다</h3>
+            <p className="boundtx">
+              이 화면은 <b>결합 키 · 값 정규화 필요 여부 · 미결합 예상</b>까지 판정해 전달합니다.
+              실제 결합 실행과 지표 계산은 이 판정을 받아 포털의 데이터 결합 기능이 수행합니다.
+            </p>
           </div>
         </div>
       </div>

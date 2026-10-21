@@ -4,9 +4,10 @@ import {
   GRAPH_FILTERS,
   GRAPH_NODES,
   NODE_KINDS,
+  REL_TYPES,
   RING_RADIUS,
   type GraphNode,
-  type RelationGroup,
+  type RelKey,
 } from '../data'
 
 type Placed = GraphNode & { x: number; y: number }
@@ -35,6 +36,12 @@ function pathTo(id: string): [string, string][] {
   return chain
 }
 
+/** 이 변환표를 거쳐 붙는 노드가 있는가 */
+const bridgeUsers: Record<string, string[]> = {}
+for (const n of GRAPH_NODES) if (n.via && NODE_MAP[n.via]?.bridge) {
+  ;(bridgeUsers[n.via] ??= []).push(n.id)
+}
+
 function shape(n: Placed) {
   const fill = NODE_KINDS[n.kind].color
   const s = n.ring === 0 ? 19 : 12
@@ -52,7 +59,7 @@ function shape(n: Placed) {
 
 export default function RelationMap({ go }: ScreenProps) {
   const [selected, setSelected] = useState<string | null>(null)
-  const [filter, setFilter] = useState<'all' | RelationGroup>('all')
+  const [filter, setFilter] = useState<'all' | RelKey>('all')
   const [asTable, setAsTable] = useState(false)
 
   const onPath = useMemo(() => {
@@ -61,8 +68,12 @@ export default function RelationMap({ go }: ScreenProps) {
     return set
   }, [selected])
 
-  const visible = (n: Placed) =>
-    n.ring === 0 || filter === 'all' || (n.groups ?? []).includes(filter)
+  // 변환표(결합 다리)는 그걸 거쳐 붙는 노드가 보이는 동안 함께 남긴다.
+  const visible = (n: Placed): boolean =>
+    n.ring === 0 ||
+    filter === 'all' ||
+    n.rel === filter ||
+    (!!n.bridge && (bridgeUsers[n.id] ?? []).some((id) => NODE_MAP[id].rel === filter))
 
   const onChain = (id: string) =>
     selected != null &&
@@ -99,11 +110,17 @@ export default function RelationMap({ go }: ScreenProps) {
                 <button
                   key={f.key}
                   className={filter === f.key ? 'on' : undefined}
+                  style={
+                    f.key !== 'all'
+                      ? ({ '--chip': REL_TYPES[f.key].color } as React.CSSProperties)
+                      : undefined
+                  }
                   onClick={() => {
                     setFilter(f.key)
                     setSelected(null)
                   }}
                 >
+                  {f.key !== 'all' && <i className="cdot" />}
                   {f.label}
                 </button>
               ))}
@@ -121,20 +138,34 @@ export default function RelationMap({ go }: ScreenProps) {
                   <thead>
                     <tr>
                       <th>데이터</th>
-                      <th>제공기관</th>
-                      <th>성격</th>
+                      <th>관계 유형</th>
                       <th>몇 단계</th>
+                      <th>결합 키</th>
+                      <th className="n">신뢰도</th>
                       <th>어떻게 이어지나</th>
                     </tr>
                   </thead>
                   <tbody>
                     {GRAPH_NODES.filter((n) => n.ring > 0).map((n) => (
                       <tr key={n.id}>
-                        <td>{n.name}</td>
-                        <td>{n.org}</td>
-                        <td>{NODE_KINDS[n.kind].name}</td>
+                        <td>
+                          {n.name}
+                          <span className="tdorg">{n.org}</span>
+                        </td>
+                        <td>
+                          {n.bridge ? (
+                            '결합 다리'
+                          ) : (
+                            <span style={{ color: REL_TYPES[n.rel!].color, fontWeight: 700 }}>
+                              {REL_TYPES[n.rel!].label}
+                              {n.sub ? ` · ${n.sub}` : ''}
+                            </span>
+                          )}
+                        </td>
                         <td>{n.ring === 1 ? '바로' : '한 단계 거쳐'}</td>
-                        <td style={{ whiteSpace: 'normal', maxWidth: 340 }}>{n.how}</td>
+                        <td className="num">{n.joinKey ?? '—'}</td>
+                        <td className="n num">{n.score?.toFixed(2) ?? '—'}</td>
+                        <td style={{ whiteSpace: 'normal', minWidth: 230, maxWidth: 320 }}>{n.how}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -261,7 +292,7 @@ export default function RelationMap({ go }: ScreenProps) {
             <>
               <h3>데이터 고르기</h3>
               <p className="hint">
-                지도에서 아무 데이터나 누르면 어떻게 이어지는지 여기에 나옵니다.
+                지도에서 아무 데이터나 누르면 어떤 관계인지, 무엇으로 붙는지 여기에 나옵니다.
               </p>
               <button className="btn p sm hintgo" onClick={() => setSelected('pop')}>
                 주민등록인구로 해보기
@@ -284,16 +315,50 @@ export default function RelationMap({ go }: ScreenProps) {
                 <div className="og">
                   {sel.org} · {sel.rows}
                 </div>
-                <span
-                  className="kind"
-                  style={{
-                    color: NODE_KINDS[sel.kind].color,
-                    background: `color-mix(in srgb, ${NODE_KINDS[sel.kind].color} 14%, transparent)`,
-                  }}
-                >
-                  {NODE_KINDS[sel.kind].name}
-                </span>
+                {sel.bridge ? (
+                  <span
+                    className="kind"
+                    style={{
+                      color: 'var(--acc)',
+                      background: 'color-mix(in srgb, var(--acc) 14%, transparent)',
+                    }}
+                  >
+                    결합 다리 · 변환표
+                  </span>
+                ) : sel.rel ? (
+                  <span
+                    className="kind"
+                    style={{
+                      color: REL_TYPES[sel.rel].color,
+                      background: `color-mix(in srgb, ${REL_TYPES[sel.rel].color} 14%, transparent)`,
+                    }}
+                  >
+                    {REL_TYPES[sel.rel].label}
+                    {sel.sub ? ` · ${sel.sub}` : ''}
+                  </span>
+                ) : (
+                  <span
+                    className="kind"
+                    style={{
+                      color: NODE_KINDS[sel.kind].color,
+                      background: `color-mix(in srgb, ${NODE_KINDS[sel.kind].color} 14%, transparent)`,
+                    }}
+                  >
+                    {NODE_KINDS[sel.kind].name}
+                  </span>
+                )}
                 {sel.how && <div className="how">{sel.how}</div>}
+                {sel.ring > 0 && sel.joinKey && (
+                  <div className="jrow">
+                    결합 키 <code className="jk">{sel.joinKey}</code>
+                    {sel.score != null && (
+                      <>
+                        {' '}
+                        · 신뢰도 <span className="num">{sel.score.toFixed(2)}</span>
+                      </>
+                    )}
+                  </div>
+                )}
                 {sel.ring > 0 && (
                   <>
                     <div className="tinytag" style={{ letterSpacing: '.06em', marginBottom: 5 }}>
@@ -312,20 +377,9 @@ export default function RelationMap({ go }: ScreenProps) {
                   </>
                 )}
                 <div className="acts">
-                  {sel.ring === 0 ? (
-                    <button className="btn sm" onClick={() => go('v2')}>
-                      데이터 보기
-                    </button>
-                  ) : (
-                    <>
-                      <button className="btn p sm" onClick={() => go('v3')}>
-                        같이 쓰기
-                      </button>
-                      <button className="btn sm" onClick={() => go('v2')}>
-                        데이터 보기
-                      </button>
-                    </>
-                  )}
+                  <button className="btn p sm" onClick={() => go('v2')}>
+                    데이터 보기
+                  </button>
                 </div>
               </div>
             </>
