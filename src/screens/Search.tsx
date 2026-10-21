@@ -20,7 +20,6 @@ export default function Search({ go, initial, tourLinksFor }: Props) {
   const [subcategory, setSubcategory] = useState(initial?.subcategory ?? '')
   const [party, setParty] = useState('')
   const [provider, setProvider] = useState('')
-  const [note, setNote] = useState(false)
 
   const major = TAXONOMY.find((m) => m.name === category)
 
@@ -141,17 +140,6 @@ export default function Search({ go, initial, tourLinksFor }: Props) {
                 <DatasetResultCard key={d.id} d={d} q={q} go={go} openLinks={tourLinksFor === d.id} tourTarget={tourLinksFor === d.id} />
               ))}
             </div>
-            {items.length < total && (
-              <div className="p-more">
-                {note ? (
-                  <span className="muted">데모에는 분야별 대표 데이터 {items.length}건만 담았습니다.</span>
-                ) : (
-                  <button className="p-btn" onClick={() => setNote(true)}>
-                    더 보기 ({items.length}/{total.toLocaleString()})
-                  </button>
-                )}
-              </div>
-            )}
           </main>
         </div>
       </div>

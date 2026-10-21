@@ -141,8 +141,7 @@ export default function Detail({ go, id, forceView }: Props) {
           )}
           {gen === 'done' && (
             <div className="p-banner done">
-              관계 생성 완료 — 확정 <b>{judged}</b>건 · 검토 대기 <b>1</b>건 (확신도 0.6~0.85 구간은 자동 확정하지 않고 운영자 판정을
-              기다립니다)
+              관계 생성 완료 — 확정 <b>{judged}</b>건 · 검토 대기 <b>1</b>건
             </div>
           )}
 
@@ -171,14 +170,6 @@ export default function Detail({ go, id, forceView }: Props) {
           )}
 
           <CandidateGroup linkable={linkable} go={go} open={judged === 0} />
-
-          <div className="p-api">
-            기관 시스템 연동 <code>GET /explore/datasets/{encodeURIComponent(d.name)}/linkable</code>
-            <span className="muted">· X-Token 헤더 · format=csv 로 파일 응답</span>
-          </div>
-          <p className="p-api" style={{ marginTop: 8 }}>
-            포털의 판정은 <b>결합 키 · 값 정규화 필요 여부 · 미결합 예상</b>까지입니다. 실제 결합 실행과 지표 계산은 이 판정을 받아 수행됩니다.
-          </p>
         </section>
 
         {!!d.columns?.length && (

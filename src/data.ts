@@ -204,21 +204,6 @@ export const DATASETS: Dataset[] = [
 
 export const byId = Object.fromEntries(DATASETS.map((d) => [d.id, d])) as Record<string, Dataset>
 
-/** 실증 기관 */
-export const ORGS: { id: string; name: string; summary: string; datasets: string[] }[] = [
-  {
-    id: 'org-a', name: 'A방송사',
-    summary: '방송 프로그램·회차·출연진 데이터를 기준으로 함께 활용할 수 있는 외부 개방 데이터를 찾습니다.',
-    datasets: ['drama-cast', 'drama-ep', 'drama-prog'],
-  },
-  {
-    id: 'org-b', name: 'B대학병원',
-    summary:
-      '병원 컨소시엄 의료데이터의 메타데이터를 기준으로 건강보험심사평가원 요양기관 데이터 등 연계 가능한 공공데이터를 찾습니다. 원본 의료데이터는 사용하지 않습니다.',
-    datasets: ['cohort', 'meta-life', 'diab-life', 'icu-bio', 'kcure', 'cdw', 'cancer-lib', 'ecg'],
-  },
-]
-
 /** 연계 데이터 1건 — 실제 LinkableItem 형태 */
 export type LinkItem = {
   /** 포털에 등록된 데이터면 상세로 이동 */
@@ -239,7 +224,7 @@ export type Linkable = {
 }
 
 export const LINKABLE: Record<string, Linkable> = {
-  ycdl: {
+  'cancer-lib': {
     groups: {
       DETAIL_FOR: [
         {

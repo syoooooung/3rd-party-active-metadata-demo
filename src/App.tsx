@@ -5,12 +5,11 @@ import './amm.css'
 import Tour, { STEPS } from './Tour'
 import Home from './screens/Home'
 import Search, { type SearchState } from './screens/Search'
-import Org from './screens/Org'
 import Detail from './screens/Detail'
 import IngestStatus from './screens/IngestStatus'
 import ReviewQueue from './screens/ReviewQueue'
 
-export type ScreenId = 'home' | 'search' | 'org' | 'detail' | 'v6' | 'v7'
+export type ScreenId = 'home' | 'search' | 'detail' | 'v6' | 'v7'
 export type ScreenProps = { go: (id: ScreenId) => void }
 
 // 실제 포털과 동일하게 라이트 테마로 고정한다 (관리 화면의 다크 토큰 비활성화)
@@ -29,14 +28,12 @@ const seenTour = () => {
 export default function App() {
   const [screen, setScreen] = useState<ScreenId>('home')
   const [datasetId, setDatasetId] = useState('cancer-lib')
-  const [orgId, setOrgId] = useState('org-a')
   const [searchInit, setSearchInit] = useState<SearchState>({})
   const [searchKey, setSearchKey] = useState(0)
   const [tour, setTour] = useState<number | null>(() => (seenTour() ? null : 0))
 
   const go = (id: string, arg?: string) => {
     if (id === 'detail' && arg) setDatasetId(arg)
-    if (id === 'org' && arg) setOrgId(arg)
     if (id === 'search') {
       setSearchInit({})
       setSearchKey((k) => k + 1)
@@ -87,7 +84,7 @@ export default function App() {
           <span className="header-mark" aria-hidden="true">A</span>
           <span className="header-name">
             <b>Active Metadata Management</b>
-            <small>데이터 찾기 · 연계 플랫폼 — 화면 데모</small>
+            <small>데이터 찾기 · 연계 플랫폼</small>
           </span>
         </button>
         <nav className="header-nav" aria-label="주 메뉴">
@@ -100,16 +97,6 @@ export default function App() {
             }}
           >
             데이터 찾기
-          </a>
-          <a
-            href="#"
-            className={screen === 'org' ? 'on' : ''}
-            onClick={(e) => {
-              e.preventDefault()
-              go('org')
-            }}
-          >
-            실증 기관
           </a>
           <a
             href="#"
@@ -127,11 +114,10 @@ export default function App() {
         </nav>
       </header>
 
-      {screen === 'home' && <Home go={go} onSearch={search} />}
+      {screen === 'home' && <Home onSearch={search} />}
       {screen === 'search' && (
         <Search key={searchKey} go={go} initial={searchInit} tourLinksFor={step?.screen === 'search' ? step.links : undefined} />
       )}
-      {screen === 'org' && <Org go={go} orgId={orgId} />}
       {screen === 'detail' && <Detail go={go} id={datasetId} forceView={step?.screen === 'detail' && step.view === 'map' ? 'map' : undefined} />}
       {screen === 'v6' && <IngestStatus go={go} />}
       {screen === 'v7' && <ReviewQueue go={go} />}
