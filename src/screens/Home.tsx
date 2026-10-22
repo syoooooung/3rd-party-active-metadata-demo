@@ -55,13 +55,14 @@ export default function Home({ onSearch }: Props) {
                 key={m.name}
                 className="p-card p-tile"
                 href="#"
+                style={{ '--tile-c': MAJOR_COLOR[m.name] } as React.CSSProperties}
                 onClick={(e) => {
                   e.preventDefault()
                   onSearch('', m.name)
                 }}
               >
-                <span className="ic" style={{ background: MAJOR_COLOR[m.name] }}>
-                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <span className="ic">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     {MAJOR_ICON[m.name]}
                   </svg>
                 </span>

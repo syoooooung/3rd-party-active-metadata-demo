@@ -13,15 +13,15 @@ export const REL_TYPES: Record<RelKey, { label: string; desc: string; color: str
 
 export const REL_ORDER: RelKey[] = ['DETAIL_FOR', 'STATISTIC_FOR', 'ADJACENT_TO', 'SAME_KIND']
 
-/** 대분류 색 — 분류 경로·타일에 같은 색 */
+/** 대분류 색 — 분류 경로·타일에 같은 색. 채도·명도를 맞춘 한 벌(Open Color 계열) */
 export const MAJOR_COLOR: Record<string, string> = {
-  과학: '#2563eb',
-  기술: '#0e7490',
-  인문: '#7c3aed',
-  사회: '#c2410c',
-  교육: '#15803d',
-  의료: '#dc2626',
-  문화: '#be185d',
+  과학: '#3b5bdb',
+  기술: '#0b7285',
+  인문: '#6741d9',
+  사회: '#d9480f',
+  교육: '#2b8a3e',
+  의료: '#c92a2a',
+  문화: '#a61e4d',
 }
 
 export const SEP = ' > '
